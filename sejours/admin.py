@@ -1,0 +1,20 @@
+from sejours.models import *
+from django.contrib import admin
+
+admin.site.register(Sejour)
+admin.site.register(Personne)
+admin.site.register(Foyer)
+admin.site.register(Animateur)
+admin.site.register(Vacancier)
+admin.site.register(Tuteur)
+admin.site.register(Saison)
+admin.site.register(Structure)
+admin.site.register(SejourVacancier)
+admin.site.register(SejourAnimateur)
+admin.site.register(Bus)
+admin.site.register(Hebergement)
+admin.site.register(Convoyage)
+admin.site.register(Etape)
+admin.site.register(EtapeVacancier)
+admin.site.register(EtapeAnimateur)
+admin.site.register(EtapeSouhait)
