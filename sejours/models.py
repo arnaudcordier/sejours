@@ -1,9 +1,11 @@
 # -*- coding: utf8 -*-
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 class Personne(models.Model):
+	#user = models.OneToOneField(User)
 	nom = models.CharField(verbose_name=u'Nom', max_length=50)
 	prenom = models.CharField(verbose_name=u'Prénom', max_length=50)
 	adresse = models.CharField(verbose_name=u'Adresse', max_length=200)
