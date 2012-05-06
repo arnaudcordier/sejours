@@ -1,3 +1,16 @@
 body {
 	color: #666;
 }
+
+#content {
+	clear: both;
+}
+ul.menu {
+	list-style: none;
+	padding: 0;
+	margin: 1em 0;
+}
+.menu li {
+	float: left;
+	margin: 0 1em;
+}
