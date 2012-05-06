@@ -136,7 +136,7 @@ class SejourVacancier(models.Model):
 	date_debut = models.DateField(verbose_name=u'Date début', blank=True)
 	date_fin = models.DateField(verbose_name=u'Date fin', blank=True)
 	def __unicode__(self):
-		return 'du ' + self.date_debut + ' au ' + self.date_fin
+		return 'du ' + self.date_debut.isoformat() + ' au ' + self.date_fin.isoformat()
 
 class SejourAnimateur(models.Model):
 	ANIMATEUR_ROLE = ((u'D', u'Directeur'),(u'A', u'Animateur'),(u'S', u'Personne de service'),(u'B', u'Bénévole'))
@@ -146,7 +146,7 @@ class SejourAnimateur(models.Model):
 	date_fin = models.DateField(verbose_name=u'Date fin', blank=True)
 	role = models.CharField(verbose_name=u'Rôle', max_length=1, choices=ANIMATEUR_ROLE)
 	def __unicode__(self):
-		return self.role + ' du ' + self.date_debut + ' au ' + self.date_fin
+		return self.role + ' du ' + self.date_debut.isoformat() + ' au ' + self.date_fin.isoformat()
 
 class Bus(models.Model):
 	chauffeur = models.ForeignKey(Personne, verbose_name=u'Chauffeur', blank=True, null=True)
