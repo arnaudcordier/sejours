@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}La saison {{ saison }}{% endblock %}
+
+{% block content %}
+<h1>La saison : {{ saison }}</h1>
+
+Les convoyages de cette saison
+
+<ul>
+{% for c in convoyages %}
+	<li>{{ c }} de {{ c.depart }} à {{ c.arrivee }}<ul>
+	{% for e in c.etape_set.all %}
+		<li>{{ e }}</li>
+	{% endfor %}
+	</ul></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

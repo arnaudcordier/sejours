@@ -1,7 +1,11 @@
-{% extends "sejours/tpl/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}Les convoyages{% endblock %}
 
 {% block content %}
-Coucou
+<ul>
+	{% for convoyage in convoyage_list %}
+			<li><a href="/convoyage/{{ convoyage.id }}/">{{ convoyage }}</a></li>
+	{% endfor %}
+</ul>
 {% endblock %}

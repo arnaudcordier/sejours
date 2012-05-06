@@ -5,24 +5,10 @@ from sejours.models import *
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-	#url(r'^$', 'index'),
-	url(r'^convoyage/$',
-		ListView.as_view(
-			queryset=Convoyage.objects.all()[:5],
-			template_name='sejours/tpl/convoyages.html')),
-	url(r'^convoyage/(?P<pk>\d+)\.html$',
-		DetailView.as_view(
-			model=Convoyage,
-			template_name='sejours/tpl/convoyage.html')),
-	url(r'^sejour/(?P<pk>\d+)\.html$',
-		DetailView.as_view(
-			model=Sejour,
-			template_name='tpl/sejour.html')),
-	url(r'^animateur/(?P<pk>\d+)/$',
-		DetailView.as_view(
-			model=Animateur,
-			template_name='tpl/animateur.html')),
+urlpatterns = patterns('sejours.views',
+	url(r'^$', 'index'),
+	url(r'^saison/(?P<saison_id>\d+)$','saison'),
+	url(r'^convoyage/(?P<convoyage_id>\d+)$','convoyage'),
 )
 
 urlpatterns += patterns('',
