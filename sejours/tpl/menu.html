@@ -3,8 +3,8 @@
 	{% for sa in user.personne.animateur.sejouranimateur_set.all %}
 		<li><a href="/{{ user.id }}/sejour/{{ sa.sejour_id }}">Mon séjour</a></li>
 	{% endfor %}
-	{% for sa in user.personne.animateur.etapeanimateur_set.all %}
-		<li><a href="/{{ user.id }}/convoyage/">Mon convoyage</a></li>
+	{% for ca in user.personne.animateur.convoyageanimateur_set.all %}
+		<li><a href="/{{ user.id }}/convoyage/{{ ca.id }}">Mon convoyage</a></li>
 	{% endfor %}
 	<li><a href="/{{ user.id }}/souhaits/">Mes choix</a></li>
 	{% for s in lessaisons %}
