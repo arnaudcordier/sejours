@@ -66,7 +66,7 @@ class Vacancier(models.Model):
 	AUTONOMIE_CHOIX = ((u'B', u'Bonne'),(u'M', u'Moyenne'),(u'R', u'Réduite'))
 	autonomie = models.CharField(verbose_name=u'Autonomie', max_length=1, choices=AUTONOMIE_CHOIX, blank=True)
 	traitement = models.BooleanField(verbose_name=u'Traitement')
-	tuteurs = models.ManyToManyField(Personne, through='Tuteur', related_name='personne')
+	tuteurs = models.ManyToManyField(Personne, through='Tuteur', related_name='tuteurs')
 	def __unicode__(self):
 		return self.personne.__str__()
 
@@ -123,8 +123,8 @@ class Sejour(models.Model):
 	prix = models.SmallIntegerField(verbose_name=u'Prix', blank=True)
 	date_visite = models.DateField(verbose_name=u'Date de la visite', blank=True)
 	date_reunion = models.DateField(verbose_name=u'Date de la réunion', blank=True)
-	vacanciers = models.ManyToManyField(Vacancier, through='SejourVacancier', related_name='vacancier')
-	animateurs = models.ManyToManyField(Animateur, through='SejourAnimateur', related_name='animateur')
+	vacanciers = models.ManyToManyField(Vacancier, through='SejourVacancier', related_name='vacanciers')
+	animateurs = models.ManyToManyField(Animateur, through='SejourAnimateur', related_name='animateurs')
 	def __unicode__(self):
 		return self.nom
 
@@ -190,25 +190,25 @@ class Etape(models.Model):
 	date_arrivee = models.DateTimeField(verbose_name=u'Date et heure d\'arrivée')
 	date_depart = models.DateTimeField(verbose_name=u'Date et heure de départ')
 	info = models.TextField(verbose_name=u'Informations', blank=True)
-	vacanciers = models.ManyToManyField(Vacancier, through='EtapeVacancier')
-	animateurs = models.ManyToManyField(Animateur, through='EtapeAnimateur')
-	souhaits = models.ManyToManyField(Animateur, through='EtapeSouhait', related_name='+')
+	souhaits = models.ManyToManyField(Animateur, through='EtapeSouhait', related_name='souhaits')
 	def __unicode__(self):
 		return self.ville
 
-class EtapeVacancier(models.Model):
-	etape = models.ForeignKey(Etape, verbose_name=u'Étape')
+class ConvoyageVacancier(models.Model):
+	convoyage = models.ForeignKey(Convoyage, verbose_name=u'Convoyage')
+	entree = models.ForeignKey(Etape, verbose_name=u'Étape entrée', related_name='vacanciersentrees')
+	sortie = models.ForeignKey(Etape, verbose_name=u'Étape sortie', related_name='vacancierssorties')
 	vacancier = models.ForeignKey(Vacancier, verbose_name=u'Vacancier')
-	entre = models.BooleanField(verbose_name=u'Rentre')
 	hebergement = models.ForeignKey(Hebergement, verbose_name=u'Hébergement', blank=True)
 	def __unicode__(self):
 		return self.vacancier.__unicode__()
 
-class EtapeAnimateur(models.Model):
+class ConvoyageAnimateur(models.Model):
 	CONVOYEUR_ROLE = ((u'R', u'Responsable'),(u'M', u'Responsable médicament'),(u'C', u'Convoyeur'),(u'V', u'Voyageur'))
-	etape = models.ForeignKey(Etape, verbose_name=u'Étape')
+	convoyage = models.ForeignKey(Convoyage, verbose_name=u'Convoyage')
+	entree = models.ForeignKey(Etape, verbose_name=u'Étape entrée', related_name='animateursentrees')
+	sortie = models.ForeignKey(Etape, verbose_name=u'Étape sortie', related_name='animateurssorties')
 	animateur = models.ForeignKey(Animateur, verbose_name=u'Animateur')
-	entre = models.BooleanField(verbose_name=u'Rentre')
 	hebergement = models.ForeignKey(Hebergement, verbose_name=u'Hébergement', blank=True)
 	role = models.CharField(verbose_name=u'Rôle', max_length=1, choices=CONVOYEUR_ROLE)
 	def __unicode__(self):
