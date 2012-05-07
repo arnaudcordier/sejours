@@ -1,5 +1,5 @@
 <ul class="menu">
-	<li><a href="/{{ user.id }}/animateur/">Ma fiche</a></li>
+	<li><a href="/{{ user.id }}/mafiche">Ma fiche</a></li>
 	{% for sa in user.personne.animateur.sejouranimateur_set.all %}
 		<li><a href="/{{ user.id }}/sejour/{{ sa.sejour_id }}">Mon séjour</a></li>
 	{% endfor %}

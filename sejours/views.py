@@ -23,6 +23,13 @@ def index(request):
 		context_instance=RequestContext(request)
 	)
 
+def mafiche(request, user_id):
+	u = get_object_or_404(User, pk=user_id)
+	return render_to_response('mafiche.html',
+		{'u': u, 'lessaisons': lessaisons()},
+		context_instance=RequestContext(request)
+	)
+
 # Fonctions utilitaires
 
 def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
