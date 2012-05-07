@@ -61,8 +61,8 @@ class Animateur(models.Model):
 
 class Vacancier(models.Model):
 	personne = models.OneToOneField(Personne)
-	maison = models.ForeignKey(Foyer, verbose_name=u'Lieu d\'habitation', related_name='+', blank=True)
-	foyer = models.ForeignKey(Foyer, verbose_name=u'Foyer fréquenté', related_name='+', blank=True)
+	maison = models.ForeignKey(Foyer, verbose_name=u'Lieu d\'habitation', blank=True, null=True, related_name='+')
+	foyer = models.ForeignKey(Foyer, verbose_name=u'Foyer fréquenté', blank=True, null=True, related_name='+')
 	AUTONOMIE_CHOIX = ((u'B', u'Bonne'),(u'M', u'Moyenne'),(u'R', u'Réduite'))
 	autonomie = models.CharField(verbose_name=u'Autonomie', max_length=1, choices=AUTONOMIE_CHOIX, blank=True)
 	traitement = models.BooleanField(verbose_name=u'Traitement')
@@ -199,7 +199,7 @@ class ConvoyageVacancier(models.Model):
 	entree = models.ForeignKey(Etape, verbose_name=u'Étape entrée', related_name='vacanciersentrees')
 	sortie = models.ForeignKey(Etape, verbose_name=u'Étape sortie', related_name='vacancierssorties')
 	vacancier = models.ForeignKey(Vacancier, verbose_name=u'Vacancier')
-	hebergement = models.ForeignKey(Hebergement, verbose_name=u'Hébergement', blank=True)
+	hebergement = models.ForeignKey(Hebergement, verbose_name=u'Hébergement', blank=True, null=True)
 	def __unicode__(self):
 		return self.vacancier.__unicode__()
 
@@ -209,7 +209,7 @@ class ConvoyageAnimateur(models.Model):
 	entree = models.ForeignKey(Etape, verbose_name=u'Étape entrée', related_name='animateursentrees')
 	sortie = models.ForeignKey(Etape, verbose_name=u'Étape sortie', related_name='animateurssorties')
 	animateur = models.ForeignKey(Animateur, verbose_name=u'Animateur')
-	hebergement = models.ForeignKey(Hebergement, verbose_name=u'Hébergement', blank=True)
+	hebergement = models.ForeignKey(Hebergement, verbose_name=u'Hébergement', blank=True, null=True)
 	role = models.CharField(verbose_name=u'Rôle', max_length=1, choices=CONVOYEUR_ROLE)
 	def __unicode__(self):
 		return self.role
