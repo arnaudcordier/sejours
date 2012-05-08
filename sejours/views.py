@@ -17,6 +17,13 @@ def convoyage(request, user_id, convoyage_id):
 		context_instance=RequestContext(request)
 	)
 
+def sejour(request, user_id, sejour_id):
+	o = get_object_or_404(Sejour, pk=sejour_id)
+	return render_to_response('sejour.html',
+		{'sejour': o, 'lessaisons': lessaisons()},
+		context_instance=RequestContext(request)
+	)
+
 def index(request):
 	return render_to_response('index.html',
 		{'lessaisons': lessaisons()},
