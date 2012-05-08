@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Séjour: «{{ sejour }}»{% endblock %}
+
+{% block content %}
+<h1>Séjour «{{ sejour }}»</h1>
+<h2>Du {{ sejour.date_debut }} au {{ sejour.date_fin }} à {{ sejour.structure.ville }}</h2>
+
+<table class='animateur'>
+	<tr><th colspan="5">Les animateurs</th></tr>
+	<tr>
+		<th>Nom Prénom</th>
+		<th>Fonction</th>
+		<th>Mail</th>
+		<th>Tel</th>
+		<th>Portable</th>
+	</tr>
+{% for sa in sejour.sejouranimateur_set.all %}
+	<tr>
+		<td>{{ sa.animateur }}</td>
+		<td>{{ sa.get_role_display }}</td>
+		<td>{{ sa.animateur.personne.email }}</td>
+		<td>{{ sa.animateur.personne.tel }}</td>
+		<td>{{ sa.animateur.personne.mobile }}</td>
+	</tr>
+{% endfor %}
+</table>
+
+<br/>
+<table class='vacancier'>
+	<tr><th colspan="3">Les vacanciers</th></tr>
+	<tr>
+		<th>Nom Prénom</th>
+		<th>Autonomie</th>
+		<th>Traitement</th>
+	</tr>
+{% for sv in sejour.sejourvacancier_set.all %}
+	<tr>
+		<td>{{ sv.vacancier }}</td>
+		<td>{{ sv.vacancier.get_autonomie_display }}</td>
+		<td>{% if sv.vacancier.traitement %}Oui{% else %}non{% endif %}</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
