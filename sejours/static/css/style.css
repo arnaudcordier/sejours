@@ -14,3 +14,12 @@ ul.menu {
 	float: left;
 	margin: 0 1em;
 }
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+table td, table th {
+	border: 1px solid #777;
+	padding: 0.5em;
+}

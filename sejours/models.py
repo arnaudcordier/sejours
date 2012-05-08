@@ -177,10 +177,10 @@ class Convoyage(models.Model):
 	def __unicode__(self):
 		return self.saison.__unicode__()
 	def depart(self):
-		e = self.etape_set.order_by('date_arrivee')[:1]
+		e = self.etape_set.order_by('date_arrivee')[0]
 		return e
 	def arrivee(self):
-		e = self.etape_set.order_by('date_arrivee').reverse()[:1]
+		e = self.etape_set.order_by('date_arrivee').reverse()[0]
 		return e
 
 class Etape(models.Model):
@@ -193,6 +193,14 @@ class Etape(models.Model):
 	souhaits = models.ManyToManyField(Animateur, through='EtapeSouhait', related_name='souhaits')
 	def __unicode__(self):
 		return self.ville
+	def vacancierEntree(self):
+		return ConvoyageVacancier.objects.filter(convoyage = self.convoyage, entree = self.id).count()
+	def vacancierSortie(self):
+		return ConvoyageVacancier.objects.filter(convoyage = self.convoyage, sortie = self.id).count()
+	def animateurEntree(self):
+		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, entree = self.id).count()
+	def animateurSortie(self):
+		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, sortie = self.id).count()
 
 class ConvoyageVacancier(models.Model):
 	convoyage = models.ForeignKey(Convoyage, verbose_name=u'Convoyage')

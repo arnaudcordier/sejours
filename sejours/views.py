@@ -10,7 +10,7 @@ def saison(request, saison_id):
 			context_instance=RequestContext(request)
 		)
 
-def convoyage(request, convoyage_id):
+def convoyage(request, user_id, convoyage_id):
 	o = get_object_or_404(Convoyage, pk=convoyage_id)
 	return render_to_response('convoyage.html',
 		{'convoyage': o, 'lessaisons': lessaisons()},
