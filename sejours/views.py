@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from sejours.models import *
 from django.template import RequestContext
+from django.forms import ModelForm
 
 def saison(request, saison_id):
 	o = get_object_or_404(Saison, pk=saison_id)
@@ -32,8 +33,13 @@ def index(request):
 
 def mafiche(request, user_id):
 	u = get_object_or_404(User, pk=user_id)
+	userform = userForm()
+	personneform = personneForm()
+	animateurform = animateurForm()
+	url_action = '/'+ user_id + '/mafiche'
+	
 	return render_to_response('mafiche.html',
-		{'u': u, 'lessaisons': lessaisons()},
+	{'u': u, 'lessaisons': lessaisons(), 'userform':userform, 'personneform':personneform, 'animateurform':animateurform, 'action': url_action },
 		context_instance=RequestContext(request)
 	)
 
@@ -42,3 +48,15 @@ def mafiche(request, user_id):
 def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
 	s = Saison.objects.all()
 	return s
+
+# Les formulaires
+class userForm(ModelForm):
+	class Meta:
+		model = User
+class personneForm(ModelForm):
+	class Meta:
+		model = Personne
+class animateurForm(ModelForm):
+	class Meta:
+		model = Animateur
+		

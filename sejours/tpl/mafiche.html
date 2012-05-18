@@ -11,6 +11,14 @@
 Je suis {{ p }} utilisateur n°{{ u.id }}, personne n° {{ p.id }}, animateur n° {{ a.id }}
 </p>
 
+<form action="{{ action }}" method="post">
+{% csrf_token %}
+{{ userform.as_p }}
+{{ personneform.as_p }}
+{{ animateurform.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
 {% endwith %}{% endwith %}
 {% endblock %}
 
