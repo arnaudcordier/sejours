@@ -4,6 +4,9 @@ from django.template import RequestContext
 from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 
+import logging
+logger = logging.getLogger('eedf')
+
 @login_required
 def saison(request, saison_id):
 	o = get_object_or_404(Saison, pk=saison_id)
