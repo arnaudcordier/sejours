@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+<p>Bravo le mot de passe a bien été changé.</p>
+<p>Vous pouvez maintenant aller vous <a href='{% url 'sejours.views.index' %}'>connecter</a>
+{% endblock %}

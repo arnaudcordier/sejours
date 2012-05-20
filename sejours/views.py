@@ -3,6 +3,7 @@ from sejours.models import *
 from django.template import RequestContext
 from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
 
 import logging
 logger = logging.getLogger('eedf')
@@ -12,8 +13,8 @@ def saison(request, saison_id):
 	o = get_object_or_404(Saison, pk=saison_id)
 	convoyages = Convoyage.objects.filter(saison_id = saison_id)
 	return render_to_response('saison.html',
-	{'lasaison': o, 'convoyages': convoyages, 'lessaisons': lessaisons()},
-			context_instance=RequestContext(request)
+	{'lasaison': o, 'convoyages': convoyages, 'lessaisons': lessaisons(), 'a': PasswordResetForm()},
+			context_instance=RequestContext(request),
 		)
 
 @login_required

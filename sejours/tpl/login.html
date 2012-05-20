@@ -9,6 +9,8 @@
 <p>Login et mot de passe ne correspondent pas, veuillez ré-essayer.</p>
 {% endif %}
 
+<p>Vous devez être enregistré pour utiliser ce site</p>
+
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
 {% csrf_token %}
 <table>
@@ -26,4 +28,7 @@
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
+<p>
+	<a href={% url 'django.contrib.auth.views.password_reset' %}>J'ai oublié mon mot de passe</a>
+</p>
 {% endblock %}

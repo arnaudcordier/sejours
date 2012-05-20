@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+{% if validlink %}
+
+{% if form.errors %}
+<p>Problème avec le formulaire.</p>
+{% endif %}
+
+<form method="post" action="">
+{% csrf_token %}
+{{ form.as_p }}
+<p><input type="submit" value="Changer mon mot de passe" /></p>
+</form>
+
+{% else %}
+
+<h1>{% trans 'Password reset unsuccessful' %}</h1>
+
+<p>{% trans "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset." %}</p>
+<p>
+	<a href={% url 'django.contrib.auth.views.password_reset' %}>J'ai oublié mon mot de passe</a>
+</p>
+
+{% endif %}
+
+
+{% endblock %}
