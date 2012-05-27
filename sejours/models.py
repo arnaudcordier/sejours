@@ -1,8 +1,14 @@
 # -*- coding: utf8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+from userena.models import UserenaBaseProfile
 
 # Create your models here.
+class EedfProfile(UserenaBaseProfile):
+	user = models.OneToOneField(User,
+		unique=True,
+		verbose_name=u'Utilisateur',
+		related_name='my_profile') 
 
 class Personne(models.Model):
 	user = models.OneToOneField(User, verbose_name=u'Utilisateur', blank=True, null=True)

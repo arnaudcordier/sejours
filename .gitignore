@@ -3,3 +3,10 @@
 *.csv
 doc/
 eedf.log
+django-guardian/
+django-userena/
+easy-thumbnails-1.0.1/
+easy_thumbnails
+guardian
+userena
+
