@@ -47,7 +47,7 @@ class createAnimateurForm(forms.Form):
 			except User.DoesNotExist: break
 		password = sha_constructor(str(random.random())).hexdigest()[:6]
 		email = self.cleaned_data['email']
-		new_user = UserenaSignup.objects.create_user(username, email, True, False)
+		new_user = UserenaSignup.objects.create_user(username, email, password, True, False)
 		personne = Personne(user_id = new_user.id)
 		personne.save()
 		animateur = Animateur(personne_id = personne.pk)
