@@ -67,7 +67,7 @@ class Animateur(models.Model):
 	expe_sejour = models.BooleanField(verbose_name=u'Expériences en séjour')
 	texte = models.TextField(verbose_name=u'Informations', blank=True)
 	permis_num = models.CharField(verbose_name=u'Numéro de permis', max_length=50, blank=True)
-	permis_date = models.DateField(verbose_name=u'Date du permis', blank=True)
+	permis_date = models.DateField(verbose_name=u'Date du permis', blank=True, null=True)
 	carte_sejour_num = models.CharField(verbose_name=u'Numéro de carte de séjour', max_length=50, blank=True)
 	def __unicode__(self):
 		return self.personne.__unicode__()
