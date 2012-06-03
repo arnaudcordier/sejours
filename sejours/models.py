@@ -32,7 +32,7 @@ class Personne(models.Model):
 	SEXE_CHOIX = ((u'M', u'Masculin'),(u'F', u'Féminin'))
 	sexe = models.CharField(verbose_name=u'Sexe', max_length=1, choices=SEXE_CHOIX, blank=True)
 	nationalite = models.CharField(verbose_name=u'Nationalité', max_length=50, blank=True)
-	naissance_date = models.DateField(verbose_name=u'Date de naissance', blank=True)
+	naissance_date = models.DateField(verbose_name=u'Date de naissance', blank=True, null=True)
 	naissance_ville = models.CharField(verbose_name=u'Ville de naissance', max_length=50, blank=True)
 	naissance_departement = models.CharField(verbose_name=u'Département de naissance', max_length=50, blank=True)
 	def __unicode__(self):
