@@ -43,4 +43,15 @@
 {% endfor %}
 </table>
 
+{% if form_create_animateur %}
+	<form method='post' action=''>
+		{% csrf_token %}
+		<fieldset>
+			<legend>Créer un animateur pour ce séjour</legend>
+			{{ form_create_animateur.as_p }}
+			<p><input type='submit' value='Créer' /></p>
+		</fieldset>
+	</form>
+{% endif %}
+
 {% endblock %}

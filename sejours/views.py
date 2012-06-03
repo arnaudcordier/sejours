@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from sejours.models import *
+from sejours.forms import *
 from django.template import RequestContext
-from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
 from userena import views as userena_views
@@ -34,8 +34,23 @@ def convoyage(request, user_id, convoyage_id):
 def sejour(request, user_id, sejour_id):
 	o = get_object_or_404(Sejour, pk=sejour_id)
 	if (peut_voir_animateur(user_id, request)):
+		# Si c'est un directeur on montre le formulaire de création d'un animateur
+		form_create_animateur = ''
+		directeur = SejourAnimateur.objects.filter(sejour_id=sejour_id, animateur__personne__user__id=user_id)
+		if (len(directeur)):
+			role = directeur[0].role
+			if (role == 'D'):
+				form_create_animateur = createAnimateurForm(sejour_id)
+				if request.method == 'POST':
+					form_create_animateur = createAnimateurForm(sejour_id, request.POST)
+					if form_create_animateur.is_valid():
+						user = form_create_animateur.save()
+						logger.error('formulaire valide')
+					else:
+						logger.error('formulaire invalide')
+
 		return render_to_response('sejour.html',
-			{'sejour': o, 'lessaisons': lessaisons()},
+			{'sejour': o, 'lessaisons': lessaisons(), 'form_create_animateur': form_create_animateur,},
 			context_instance=RequestContext(request)
 		)
 	else:
@@ -79,14 +94,3 @@ def peut_voir_animateur(user_id, request):
 		logger.error('ca passe pas')
 		return False
 
-# Les formulaires
-class userForm(ModelForm):
-	class Meta:
-		model = User
-class personneForm(ModelForm):
-	class Meta:
-		model = Personne
-class animateurForm(ModelForm):
-	class Meta:
-		model = Animateur
-		
