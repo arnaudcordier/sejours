@@ -2,6 +2,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from userena.models import UserenaBaseProfile
+from django.dispatch import receiver
+from userena.signals import *
+
+# signals
+@receiver(activation_complete)
+def creation_animateur(sender, **kwargs):
+	return True
 
 # Create your models here.
 class EedfProfile(UserenaBaseProfile):
