@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, get_object_or_404
 from sejours.models import *
 from django.template import RequestContext
 from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
+from userena import views as userena_views
 
 import logging
 logger = logging.getLogger('eedf')
@@ -54,7 +56,6 @@ def mafiche(request, user_id):
 	)
 
 # Fonctions utilitaires
-
 def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
 	s = Saison.objects.all()
 	return s
