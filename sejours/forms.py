@@ -25,6 +25,8 @@ class animateurForm(ModelForm):
 		model = Animateur
 
 class createAnimateurForm(forms.Form):
+	nom = forms.CharField(label=u'Nom', max_length=30, required=False)
+	prenom = forms.CharField(label=u'Prénom', max_length=30, required=False)
 	email = forms.EmailField(widget=forms.TextInput(attrs=dict({'class': 'required'}, maxlength=75)))
 
 	def __init__(self, sejour_id, *args, **kwargs):
@@ -46,9 +48,11 @@ class createAnimateurForm(forms.Form):
 				User.objects.get(username__iexact=username)
 			except User.DoesNotExist: break
 		password = sha_constructor(str(random.random())).hexdigest()[:6]
+		nom = self.cleaned_data['nom']
+		prenom = self.cleaned_data['prenom']
 		email = self.cleaned_data['email']
-		new_user = UserenaSignup.objects.create_user(username, email, password, True, False)
-		personne = Personne(user_id = new_user.id)
+		new_user = UserenaSignup.objects.create_user(username, email, password, True, False) # activé, pas de mail
+		personne = Personne(user_id = new_user.id, nom=nom, prenom=prenom)
 		personne.save()
 		animateur = Animateur(personne_id = personne.pk)
 		animateur.save()
