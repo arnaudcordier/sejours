@@ -67,13 +67,23 @@ def index(request):
 def mafiche(request, user_id):
 	u = get_object_or_404(User, pk=user_id)
 	if (peut_voir_animateur(user_id, request)):
-		userform = userForm()
-		personneform = personneForm()
-		animateurform = animateurForm()
+		personne = Personne.objects.get(user__id=user_id)
+		animateur = Animateur.objects.get(personne__id=personne.id)
+		if request.method == 'POST':
+			personneform = personneForm(request.POST, instance=personne)
+			animateurform = animateurForm(request.POST, instance=animateur)
+			if animateurform.is_valid() and personneform.is_valid():
+				personneform.save()
+				animateurform.save()
+				return redirect('/'+ user_id + '/mafiche')
+		else:
+			personneform = personneForm(instance=personne)
+			animateurform = animateurForm(instance=animateur)
+
 		url_action = '/'+ user_id + '/mafiche'
 		
 		return render_to_response('mafiche.html',
-			{'u': u, 'lessaisons': lessaisons(), 'userform':userform, 'personneform':personneform, 'animateurform':animateurform, 'action': url_action },
+			{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform, 'action': url_action },
 			context_instance=RequestContext(request)
 		)
 	else:

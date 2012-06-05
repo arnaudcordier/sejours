@@ -12,22 +12,22 @@ import logging
 logger = logging.getLogger('eedf')
 
 # Les formulaires
-class userForm(ModelForm):
-	class Meta:
-		model = User
-
 class personneForm(ModelForm):
 	class Meta:
 		model = Personne
+		exclude = ('user','email')
 
 class animateurForm(ModelForm):
 	class Meta:
 		model = Animateur
+		exclude = ('personne')
 
 class createAnimateurForm(forms.Form):
+	#roleChoix = SejourAnimateur.ANIMATEUR_ROLE
 	nom = forms.CharField(label=u'Nom', max_length=30, required=False)
 	prenom = forms.CharField(label=u'Prénom', max_length=30, required=False)
 	email = forms.EmailField(widget=forms.TextInput(attrs=dict({'class': 'required'}, maxlength=75)))
+	#role = forms.ChoiceField(label=u'Rôle', choices=roleChoix)
 
 	def __init__(self, sejour_id, *args, **kwargs):
 		super(createAnimateurForm, self).__init__(*args, **kwargs)
