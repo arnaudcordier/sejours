@@ -5,6 +5,10 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.hashcompat import sha_constructor
 from userena.models import UserenaSignup
+from django.template import loader
+from django.utils.http import int_to_base36
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.models import get_current_site
 
 import random
 
@@ -39,7 +43,7 @@ class createAnimateurForm(forms.Form):
 			raise forms.ValidationError('Cet email existe déjà. Veuillez en choisir un autre')
 		return self.cleaned_data['email']
 
-	def save(self):
+	def save(self, request):
 		""" Generate a random username before falling back to parent signup form """
 		while True:
 			username = sha_constructor(str(random.random())).hexdigest()[:5]
@@ -54,6 +58,26 @@ class createAnimateurForm(forms.Form):
 		animateur_id = createAnimateur(nom, prenom, email, new_user.id)
 		sejour = SejourAnimateur(sejour_id=self.sejour_id, animateur_id=animateur_id, role='A')
 		sejour.save()
+		# envoi d'un mail d'invite à choisir un mot de passe
+		from django.core.mail import send_mail
+		from django.conf import settings
+		current_site = get_current_site(request)
+		site_name = current_site.name
+		domain = current_site.domain
+		c = {
+			'email': email,
+			'domain': domain,
+			'site_name': site_name,
+			'uid': int_to_base36(new_user.id),
+			'user': new_user,
+			'token': default_token_generator.make_token(new_user),
+			'protocol': 'https',
+			}
+		subject = loader.render_to_string('animcreation_sujet.html', c)
+		subject = ''.join(subject.splitlines())
+		email = loader.render_to_string('animcreation_body.html', c)
+		send_mail(subject, email, settings.DEFAULT_FROM_EMAIL, [new_user.email])
+				
 		return new_user
 
 def createAnimateur(nom, prenom, email, user_id):

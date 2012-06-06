@@ -1,0 +1,10 @@
+{% load url from future %}
+Bonjour,
+
+Votre directeur vient de vous inscrire sur le site {{ domain }} afin que vous puissiez enregistrer vos coordonnées et information pour votre prochain séjour.
+
+Pour finir cette inscription et pouvoir remplir votre fiche de renseignement, suivez le lien ci-dessous et choisissez un mot de passe pour protéger votre compte.
+
+{{ protocol}}://{{ domain }}{% url 'django.contrib.auth.views.password_reset_confirm' uidb36=uid token=token %}
+
+Eedf

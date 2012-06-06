@@ -44,7 +44,7 @@ def sejour(request, user_id, sejour_id):
 				if request.method == 'POST':
 					form_create_animateur = createAnimateurForm(sejour_id, request.POST)
 					if form_create_animateur.is_valid():
-						user = form_create_animateur.save()
+						user = form_create_animateur.save(request)
 						return redirect('/'+ user_id + '/sejour/' + sejour_id)
 
 		return render_to_response('sejour.html',
