@@ -31,7 +31,6 @@ class createAnimateurForm(forms.Form):
 
 	def __init__(self, sejour_id, *args, **kwargs):
 		super(createAnimateurForm, self).__init__(*args, **kwargs)
-		logger.error(sejour_id)
 		self.sejour_id = sejour_id
 		
 	def clean_email(self):
@@ -52,10 +51,14 @@ class createAnimateurForm(forms.Form):
 		prenom = self.cleaned_data['prenom']
 		email = self.cleaned_data['email']
 		new_user = UserenaSignup.objects.create_user(username, email, password, True, False) # activé, pas de mail
-		personne = Personne(user_id = new_user.id, nom=nom, prenom=prenom)
-		personne.save()
-		animateur = Animateur(personne_id = personne.pk)
-		animateur.save()
-		sejour = SejourAnimateur(sejour_id=self.sejour_id, animateur_id=animateur.pk, role='A')
+		animateur_id = createAnimateur(nom, prenom, email, new_user.id)
+		sejour = SejourAnimateur(sejour_id=self.sejour_id, animateur_id=animateur_id, role='A')
 		sejour.save()
 		return new_user
+
+def createAnimateur(nom, prenom, email, user_id):
+	personne = Personne(user_id = user_id, nom=nom, prenom=prenom, email=email)
+	personne.save()
+	animateur = Animateur(personne_id = personne.pk)
+	animateur.save()
+	return animateur.pk

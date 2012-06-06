@@ -45,9 +45,7 @@ def sejour(request, user_id, sejour_id):
 					form_create_animateur = createAnimateurForm(sejour_id, request.POST)
 					if form_create_animateur.is_valid():
 						user = form_create_animateur.save()
-						logger.error('formulaire valide')
-					else:
-						logger.error('formulaire invalide')
+						return redirect('/'+ user_id + '/sejour/' + sejour_id)
 
 		return render_to_response('sejour.html',
 			{'sejour': o, 'lessaisons': lessaisons(), 'form_create_animateur': form_create_animateur,},

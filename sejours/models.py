@@ -5,10 +5,22 @@ from userena.models import UserenaBaseProfile
 from django.dispatch import receiver
 from userena.signals import *
 
+import logging
+logger = logging.getLogger('eedf')
+
 # signals
 @receiver(activation_complete)
 def creation_animateur(sender, **kwargs):
+	user = kwargs['user']
+	animid = createAnimateur(user.first_name, user.last_name, user.email, user.id)
 	return True
+
+def createAnimateur(nom, prenom, email, user_id):
+	personne = Personne(user_id = user_id, nom=nom, prenom=prenom, email=email)
+	personne.save()
+	animateur = Animateur(personne_id = personne.pk)
+	animateur.save()
+	return animateur.pk
 
 # Create your models here.
 class EedfProfile(UserenaBaseProfile):
