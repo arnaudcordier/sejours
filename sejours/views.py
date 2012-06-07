@@ -96,6 +96,8 @@ def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
 def peut_voir_animateur(user_id, request):
 	req = RequestContext(request)
 	user = req.get('user')
+	if (user.is_superuser):
+		return True
 	if (int(user_id) == int(user.id)):
 		return True
 	else:
