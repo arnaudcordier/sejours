@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
 from userena.models import UserenaBaseProfile
@@ -78,6 +78,7 @@ class Animateur(models.Model):
 	expe_handicap = models.BooleanField(verbose_name=u'Expériences dans le handicap')
 	expe_sejour = models.BooleanField(verbose_name=u'Expériences en séjour')
 	texte = models.TextField(verbose_name=u'Informations', blank=True)
+	identite_num = models.CharField(verbose_name=u'Numéro de carte d\'identité', max_length=50, blank=True)
 	permis_num = models.CharField(verbose_name=u'Numéro de permis', max_length=50, blank=True)
 	permis_date = models.DateField(verbose_name=u'Date du permis', blank=True, null=True)
 	carte_sejour_num = models.CharField(verbose_name=u'Numéro de carte de séjour', max_length=50, blank=True)
@@ -146,8 +147,8 @@ class Sejour(models.Model):
 	info = models.TextField(verbose_name=u'Informations', blank=True)
 	descriptif = models.TextField(verbose_name=u'Descriptif du catalogue', blank=True)
 	prix = models.SmallIntegerField(verbose_name=u'Prix', blank=True)
-	date_visite = models.DateField(verbose_name=u'Date de la visite', blank=True)
-	date_reunion = models.DateField(verbose_name=u'Date de la réunion', blank=True)
+	date_visite = models.DateField(verbose_name=u'Date de la visite', blank=True, null=True)
+	date_reunion = models.DateField(verbose_name=u'Date de la réunion', blank=True, null=True)
 	vacanciers = models.ManyToManyField(Vacancier, through='SejourVacancier', related_name='vacanciers')
 	animateurs = models.ManyToManyField(Animateur, through='SejourAnimateur', related_name='animateurs')
 	def __unicode__(self):
