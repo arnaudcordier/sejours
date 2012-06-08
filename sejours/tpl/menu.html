@@ -1,4 +1,3 @@
-<ul class="menu">
 	<li><a href="/{{ user.id }}/mafiche">Ma fiche</a></li>
 	{% for sa in user.personne.animateur.sejouranimateur_set.all %}
 		<li><a href="/{{ user.id }}/sejour/{{ sa.sejour_id }}">Mon séjour</a></li>
@@ -6,10 +5,9 @@
 	{% for ca in user.personne.animateur.convoyageanimateur_set.all %}
 		<li><a href="/{{ user.id }}/convoyage/{{ ca.id }}">Mon convoyage</a></li>
 	{% endfor %}
-	<li><a href="/{{ user.id }}/souhaits/">Mes choix</a></li>
+<!-- 	<li><a href="/{{ user.id }}/souhaits/">Mes choix</a></li> -->
 	{% for s in lessaisons %}
 		<li><a href="/saison/{{ s.id }}">{{ s }}</a></li>
 	{% endfor %}
 	<li>{{ saison }}</li>
 	<li><a href="/accounts/signout/">déconnexion</a></li>
-</ul>

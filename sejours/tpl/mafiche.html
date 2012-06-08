@@ -2,13 +2,12 @@
 
 {% block title %}Ma fiche: {{ u.personne }}{% endblock %}
 
-
 {% block content %}
 {% with p=u.personne %}{% with a=p.animateur %}
 <h1>Ma fiche: {{ u.personne }}</h1>
 
 <p>
-Je suis {{ p }} utilisateur n°{{ u.id }}, personne n° {{ p.id }}, animateur n° {{ a.id }}
+Veuillez remplir cette fiche d'information
 </p>
 
 <form action="{{ action }}" method="post">
