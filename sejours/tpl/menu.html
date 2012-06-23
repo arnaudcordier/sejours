@@ -9,5 +9,10 @@
 	{% for s in lessaisons %}
 		<li><a href="/saison/{{ s.id }}">{{ s }}</a></li>
 	{% endfor %}
+	{% if user.is_superuser %}
+		{% for s in lessaisons %}
+			<li><a href="/{{ s.id }}/sejours">sejours</a></li>
+		{% endfor %}
+	{% endif %}
 	<li>{{ saison }}</li>
 	<li><a href="/accounts/signout/">déconnexion</a></li>

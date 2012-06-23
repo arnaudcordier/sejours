@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Les séjours{% endblock %}
+
+{% block content %}
+<h1>Séjours</h1>
+
+<ul>
+{% for sejour in sejours %}
+	<li><a href='/1/sejour/{{ sejour.id }}'>{{ sejour }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

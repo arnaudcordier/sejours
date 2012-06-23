@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from sejours.models import *
 from sejours.forms import *
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import PasswordResetForm
 from userena import views as userena_views
 
@@ -53,6 +53,16 @@ def sejour(request, user_id, sejour_id):
 		)
 	else:
 		return redirect('/')
+
+@permission_required('user.is_superuser')
+def sejours(request, saison_id):
+	saison = get_object_or_404(Saison, pk=saison_id)
+	sejours = Sejour.objects.filter(saison__id=saison_id)
+	return render_to_response('sejours.html',
+		{'sejours': sejours},
+		context_instance=RequestContext(request)
+	)
+   
 
 @login_required
 def index(request):
