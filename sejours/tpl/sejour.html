@@ -3,6 +3,10 @@
 {% block title %}Séjour: «{{ sejour }}»{% endblock %}
 
 {% block content %}
+{% if user.is_superuser %}
+	<div style="float:right">{% include "sejours_list.html" %}</div>
+{% endif %}
+
 <h1>Séjour «{{ sejour }}»</h1>
 <h2>Du {{ sejour.date_debut }} au {{ sejour.date_fin }} à {{ sejour.structure.ville }}</h2>
 

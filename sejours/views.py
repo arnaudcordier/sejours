@@ -59,6 +59,7 @@ def convoyage(request, convoyage_id):
 @login_required
 def sejour(request, sejour_id):
 	o = get_object_or_404(Sejour, pk=sejour_id)
+	sejours = Sejour.objects.filter(saison__id=o.saison_id).order_by('nom')
 	user_id = getCurrentUser(request).id
 	if (peut_voir_animateur(user_id, request)):
 		# Si c'est un directeur on montre le formulaire de création d'un animateur
@@ -75,7 +76,7 @@ def sejour(request, sejour_id):
 						return redirect('/sejour/' + sejour_id)
 
 		return render_to_response('sejour.html',
-			{'sejour': o, 'lessaisons': lessaisons(), 'form_create_animateur': form_create_animateur,},
+			{'sejour': o, 'sejours': sejours, 'lessaisons': lessaisons(), 'form_create_animateur': form_create_animateur,},
 			context_instance=RequestContext(request)
 		)
 	else:
@@ -84,7 +85,7 @@ def sejour(request, sejour_id):
 @permission_required('user.is_superuser')
 def sejours(request, saison_id):
 	saison = get_object_or_404(Saison, pk=saison_id)
-	sejours = Sejour.objects.filter(saison__id=saison_id)
+	sejours = Sejour.objects.filter(saison__id=saison_id).order_by('nom')
 	return render_to_response('sejours.html',
 		{'sejours': sejours, 'lessaisons': lessaisons()},
 		context_instance=RequestContext(request)
