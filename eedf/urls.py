@@ -9,11 +9,11 @@ admin.autodiscover()
 
 urlpatterns = patterns('sejours.views',
 	url(r'^$', 'index'),
-	url(r'^mafiche$','mafiche'),
-	url(r'^saison/(?P<saison_id>\d+)$','saison'),
-	url(r'^convoyage/(?P<convoyage_id>\d+)$','convoyage'),
-	url(r'^sejour/(?P<sejour_id>\d+)$','sejour'),
-	url(r'^(?P<saison_id>\d+)/sejours$','sejours'),
+	url(r'^mafiche$','mafiche', name='mafiche'),
+	url(r'^saison/(?P<saison_id>\d+)$','saison', name='saison'),
+	url(r'^convoyage/(?P<convoyage_id>\d+)$','convoyage', name='convoyage'),
+	url(r'^sejour/(?P<sejour_id>\d+)$','sejour', name='sejour'),
+	url(r'^(?P<saison_id>\d+)/sejours$','sejours', name='sejours'),
 )
 
 urlpatterns += patterns('',
