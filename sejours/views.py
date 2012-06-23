@@ -12,75 +12,66 @@ logger = logging.getLogger('eedf')
 
 @login_required
 def mafiche(request):
-	user_id = getCurrentUser(request).id
-	u = get_object_or_404(User, pk=user_id)
-	if (peut_voir_animateur(user_id, request)):
-		personne = Personne.objects.get(user__id=user_id)
-		animateur = Animateur.objects.get(personne__id=personne.id)
-		if request.method == 'POST':
-			personneform = personneForm(request.POST, instance=personne)
-			animateurform = animateurForm(request.POST, instance=animateur)
-			if animateurform.is_valid() and personneform.is_valid():
-				personneform.save()
-				animateurform.save()
-				return redirect('/mafiche')
-		else:
-			personneform = personneForm(instance=personne)
-			animateurform = animateurForm(instance=animateur)
-
-		return render_to_response('mafiche.html',
-			{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform },
-			context_instance=RequestContext(request)
-		)
+	user = getCurrentUser(request)
+	u = get_object_or_404(User, pk=user.id)
+	personne = Personne.objects.get(user__id=user.id)
+	animateur = Animateur.objects.get(personne__id=personne.id)
+	if request.method == 'POST':
+		personneform = personneForm(request.POST, instance=personne)
+		animateurform = animateurForm(request.POST, instance=animateur)
+		if animateurform.is_valid() and personneform.is_valid():
+			personneform.save()
+			animateurform.save()
+			return redirect('/mafiche')
 	else:
-		return redirect('/')
+		personneform = personneForm(instance=personne)
+		animateurform = animateurForm(instance=animateur)
+
+	return render_to_response('mafiche.html',
+		{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform },
+		context_instance=RequestContext(request)
+	)
 
 @login_required
 def saison(request, saison_id):
-	o = get_object_or_404(Saison, pk=saison_id)
+	saison = get_object_or_404(Saison, pk=saison_id)
 	convoyages = Convoyage.objects.filter(saison_id = saison_id)
 	return render_to_response('saison.html',
-	{'lasaison': o, 'convoyages': convoyages, 'lessaisons': lessaisons(), 'a': PasswordResetForm()},
-			context_instance=RequestContext(request),
-		)
+		{'lasaison': saison, 'convoyages': convoyages, 'lessaisons': lessaisons(), 'a': PasswordResetForm()},
+		context_instance=RequestContext(request),
+	)
 
 @login_required
 def convoyage(request, convoyage_id):
-	user_id = getCurrentUser(request).id
-	o = get_object_or_404(Convoyage, pk=convoyage_id)
-	if (peut_voir_animateur(user_id, request)):
-		return render_to_response('convoyage.html',
-			{'convoyage': o, 'lessaisons': lessaisons()},
-			context_instance=RequestContext(request)
-		)
-	else:
-		return redirect('/')
+	user = getCurrentUser(request)
+	convoyage = get_object_or_404(Convoyage, pk=convoyage_id)
+	return render_to_response('convoyage.html',
+		{'convoyage': convoyage, 'lessaisons': lessaisons()},
+		context_instance=RequestContext(request)
+	)
 
 @login_required
 def sejour(request, sejour_id):
-	o = get_object_or_404(Sejour, pk=sejour_id)
-	sejours = Sejour.objects.filter(saison__id=o.saison_id).order_by('nom')
-	user_id = getCurrentUser(request).id
-	if (peut_voir_animateur(user_id, request)):
-		# Si c'est un directeur on montre le formulaire de création d'un animateur
-		form_create_animateur = ''
-		directeur = SejourAnimateur.objects.filter(sejour_id=sejour_id, animateur__personne__user__id=user_id)
-		if (len(directeur)):
-			role = directeur[0].role
-			if (role == 'D'):
-				form_create_animateur = createAnimateurForm(sejour_id)
-				if request.method == 'POST':
-					form_create_animateur = createAnimateurForm(sejour_id, request.POST)
-					if form_create_animateur.is_valid():
-						user = form_create_animateur.save(request)
-						return redirect('/sejour/' + sejour_id)
+	sejour = get_object_or_404(Sejour, pk=sejour_id)
+	sejours = Sejour.objects.filter(saison__id=sejour.saison_id).order_by('nom')
+	user = getCurrentUser(request)
+	# Si c'est un directeur on montre le formulaire de création d'un animateur
+	form_create_animateur = ''
+	directeur = SejourAnimateur.objects.filter(sejour_id=sejour_id, animateur__personne__user__id=user.id)
+	if (len(directeur)):
+		role = directeur[0].role
+		if (role == 'D'):
+			form_create_animateur = createAnimateurForm(sejour_id)
+			if request.method == 'POST':
+				form_create_animateur = createAnimateurForm(sejour_id, request.POST)
+				if form_create_animateur.is_valid():
+					user = form_create_animateur.save(request)
+					return redirect('/sejour/' + sejour_id)
 
-		return render_to_response('sejour.html',
-			{'sejour': o, 'sejours': sejours, 'lessaisons': lessaisons(), 'form_create_animateur': form_create_animateur,},
-			context_instance=RequestContext(request)
-		)
-	else:
-		return redirect('/')
+	return render_to_response('sejour.html',
+		{'sejour': sejour, 'sejours': sejours, 'lessaisons': lessaisons(), 'form_create_animateur': form_create_animateur,},
+		context_instance=RequestContext(request)
+	)
 
 @permission_required('user.is_superuser')
 def sejours(request, saison_id):
@@ -100,18 +91,15 @@ def index(request):
 
 # Fonctions utilitaires
 def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
-	s = Saison.objects.all()
-	return s
+	saison = Saison.objects.all()
+	return saison
 
-def peut_voir_animateur(user_id, request):
+def peut_voir_animateur(user, request):
 	req = RequestContext(request)
-	user = req.get('user')
 	if (user.is_superuser):
 		return True
-	if (int(user_id) == int(user.id)):
-		return True
 	else:
-		logger.error('ca passe pas')
+		logger.error(user.email + 'à tenté de se connecter')
 		return False
 
 # renvoie l'utilisateur courant
