@@ -71,7 +71,7 @@ class createAnimateurForm(forms.Form):
 			'uid': int_to_base36(new_user.id),
 			'user': new_user,
 			'token': default_token_generator.make_token(new_user),
-			'protocol': 'https',
+			'protocol': 'http',
 			}
 		subject = loader.render_to_string('animcreation_sujet.html', c)
 		subject = ''.join(subject.splitlines())
