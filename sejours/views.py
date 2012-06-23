@@ -11,6 +11,33 @@ import logging
 logger = logging.getLogger('eedf')
 
 @login_required
+def mafiche(request):
+	user_id = getCurrentUser(request).id
+	u = get_object_or_404(User, pk=user_id)
+	if (peut_voir_animateur(user_id, request)):
+		personne = Personne.objects.get(user__id=user_id)
+		animateur = Animateur.objects.get(personne__id=personne.id)
+		if request.method == 'POST':
+			personneform = personneForm(request.POST, instance=personne)
+			animateurform = animateurForm(request.POST, instance=animateur)
+			if animateurform.is_valid() and personneform.is_valid():
+				personneform.save()
+				animateurform.save()
+				return redirect('/'+ user_id + '/mafiche')
+		else:
+			personneform = personneForm(instance=personne)
+			animateurform = animateurForm(instance=animateur)
+
+		url_action = '/'+ user_id + '/mafiche'
+		
+		return render_to_response('mafiche.html',
+			{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform, 'action': url_action },
+			context_instance=RequestContext(request)
+		)
+	else:
+		return redirect('/')
+
+@login_required
 def saison(request, saison_id):
 	o = get_object_or_404(Saison, pk=saison_id)
 	convoyages = Convoyage.objects.filter(saison_id = saison_id)
@@ -31,8 +58,9 @@ def convoyage(request, user_id, convoyage_id):
 		return redirect('/')
 
 @login_required
-def sejour(request, user_id, sejour_id):
+def sejour(request, sejour_id):
 	o = get_object_or_404(Sejour, pk=sejour_id)
+	user_id = getCurrentUser(request).id
 	if (peut_voir_animateur(user_id, request)):
 		# Si c'est un directeur on montre le formulaire de création d'un animateur
 		form_create_animateur = ''
@@ -59,10 +87,9 @@ def sejours(request, saison_id):
 	saison = get_object_or_404(Saison, pk=saison_id)
 	sejours = Sejour.objects.filter(saison__id=saison_id)
 	return render_to_response('sejours.html',
-		{'sejours': sejours},
+		{'sejours': sejours, 'lessaisons': lessaisons()},
 		context_instance=RequestContext(request)
 	)
-   
 
 @login_required
 def index(request):
@@ -70,33 +97,6 @@ def index(request):
 		{'lessaisons': lessaisons()},
 		context_instance=RequestContext(request)
 	)
-
-@login_required
-def mafiche(request, user_id):
-	u = get_object_or_404(User, pk=user_id)
-	if (peut_voir_animateur(user_id, request)):
-		personne = Personne.objects.get(user__id=user_id)
-		animateur = Animateur.objects.get(personne__id=personne.id)
-		if request.method == 'POST':
-			personneform = personneForm(request.POST, instance=personne)
-			animateurform = animateurForm(request.POST, instance=animateur)
-			if animateurform.is_valid() and personneform.is_valid():
-				personneform.save()
-				animateurform.save()
-				return redirect('/'+ user_id + '/mafiche')
-		else:
-			personneform = personneForm(instance=personne)
-			animateurform = animateurForm(instance=animateur)
-
-		url_action = '/'+ user_id + '/mafiche'
-		
-		return render_to_response('mafiche.html',
-			{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform, 'action': url_action },
-			context_instance=RequestContext(request)
-		)
-	else:
-		return redirect('/')
-
 
 # Fonctions utilitaires
 def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
@@ -114,3 +114,7 @@ def peut_voir_animateur(user_id, request):
 		logger.error('ca passe pas')
 		return False
 
+# renvoie l'utilisateur courant
+def getCurrentUser(request):
+	context=RequestContext(request)
+	return context.get('user')

@@ -1,6 +1,6 @@
-	<li><a href="/{{ user.id }}/mafiche">Ma fiche</a></li>
+	<li><a href="/mafiche">Ma fiche</a></li>
 	{% for sa in user.personne.animateur.sejouranimateur_set.all %}
-		<li><a href="/{{ user.id }}/sejour/{{ sa.sejour_id }}">Mon séjour</a></li>
+		<li><a href="/sejour/{{ sa.sejour_id }}">Mon séjour</a></li>
 	{% endfor %}
 	{% for ca in user.personne.animateur.convoyageanimateur_set.all %}
 		<li><a href="/{{ user.id }}/convoyage/{{ ca.id }}">Mon convoyage</a></li>
@@ -11,7 +11,7 @@
 	{% endfor %}
 	{% if user.is_superuser %}
 		{% for s in lessaisons %}
-			<li><a href="/{{ s.id }}/sejours">sejours</a></li>
+			<li><a href="/{{ s.id }}/sejours">sejours de {{ s }}</a></li>
 		{% endfor %}
 	{% endif %}
 	<li>{{ saison }}</li>
