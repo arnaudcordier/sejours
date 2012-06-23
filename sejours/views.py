@@ -23,15 +23,13 @@ def mafiche(request):
 			if animateurform.is_valid() and personneform.is_valid():
 				personneform.save()
 				animateurform.save()
-				return redirect('/'+ user_id + '/mafiche')
+				return redirect('/mafiche')
 		else:
 			personneform = personneForm(instance=personne)
 			animateurform = animateurForm(instance=animateur)
 
-		url_action = '/'+ user_id + '/mafiche'
-		
 		return render_to_response('mafiche.html',
-			{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform, 'action': url_action },
+			{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform },
 			context_instance=RequestContext(request)
 		)
 	else:
