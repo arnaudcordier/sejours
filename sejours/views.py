@@ -45,7 +45,8 @@ def saison(request, saison_id):
 		)
 
 @login_required
-def convoyage(request, user_id, convoyage_id):
+def convoyage(request, convoyage_id):
+	user_id = getCurrentUser(request).id
 	o = get_object_or_404(Convoyage, pk=convoyage_id)
 	if (peut_voir_animateur(user_id, request)):
 		return render_to_response('convoyage.html',
