@@ -27,14 +27,20 @@ class animateurForm(ModelForm):
 		exclude = ('personne')
 
 class createAnimateurForm(forms.Form):
-	#roleChoix = SejourAnimateur.ANIMATEUR_ROLE
 	nom = forms.CharField(label=u'Nom', max_length=30, required=False)
 	prenom = forms.CharField(label=u'Prénom', max_length=30, required=False)
 	email = forms.EmailField(widget=forms.TextInput(attrs=dict({'class': 'required'}, maxlength=75)))
-	#role = forms.ChoiceField(label=u'Rôle', choices=roleChoix)
+	role = forms.ChoiceField(label=u'Rôle', choices=SejourAnimateur.ANIMATEUR_ROLE)
 
 	def __init__(self, sejour_id, *args, **kwargs):
+		sans_directeur = kwargs.pop('sans_directeur', True)
 		super(createAnimateurForm, self).__init__(*args, **kwargs)
+
+		if (sans_directeur):
+			choixsansdirecteur = SejourAnimateur.ANIMATEUR_ROLE[:]
+			choixsansdirecteur.remove((u'D', u'Directeur'))
+			self.fields['role'].choices = choixsansdirecteur
+		
 		self.sejour_id = sejour_id
 		
 	def clean_email(self):

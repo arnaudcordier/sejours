@@ -59,7 +59,8 @@ def sejour(request, sejour_id):
 	if (peut_voir_sejour(sejour, user)):
 		form_create_animateur = ''
 		if (peut_creer_sejour_animateur(sejour, user)):
-			form_create_animateur = createAnimateurForm(sejour_id)
+			sans_directeur = not user.is_superuser
+			form_create_animateur = createAnimateurForm(sejour_id, sans_directeur=sans_directeur)
 			if request.method == 'POST':
 				form_create_animateur = createAnimateurForm(sejour_id, request.POST)
 				if form_create_animateur.is_valid():

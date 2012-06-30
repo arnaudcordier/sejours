@@ -165,7 +165,7 @@ class SejourVacancier(models.Model):
 		return self.vacancier.__unicode__() + u' à ' + self.sejour.__unicode__()
 
 class SejourAnimateur(models.Model):
-	ANIMATEUR_ROLE = ((u'D', u'Directeur'),(u'A', u'Animateur'),(u'S', u'Personne de service'),(u'B', u'Bénévole'))
+	ANIMATEUR_ROLE = [(u'D', u'Directeur'),(u'A', u'Animateur'),(u'S', u'Personne de service'),(u'B', u'Bénévole')]
 	sejour = models.ForeignKey(Sejour, verbose_name=u'Séjour')
 	animateur = models.ForeignKey(Animateur, verbose_name=u'Animateur')
 	date_debut = models.DateField(verbose_name=u'Date début', blank=True, null=True)
