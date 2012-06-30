@@ -57,18 +57,14 @@ def sejour(request, sejour_id):
 	user = getCurrentUser(request)
 
 	if (peut_voir_sejour(sejour, user)):
-		# Si c'est un directeur on montre le formulaire de création d'un animateur
 		form_create_animateur = ''
-		directeur = SejourAnimateur.objects.filter(sejour_id=sejour_id, animateur__personne__user__id=user.id)
-		if (len(directeur)):
-			role = directeur[0].role
-			if (role == 'D'):
-				form_create_animateur = createAnimateurForm(sejour_id)
-				if request.method == 'POST':
-					form_create_animateur = createAnimateurForm(sejour_id, request.POST)
-					if form_create_animateur.is_valid():
-						user = form_create_animateur.save(request)
-						return redirect('/sejour/' + sejour_id)
+		if (peut_creer_sejour_animateur(sejour, user)):
+			form_create_animateur = createAnimateurForm(sejour_id)
+			if request.method == 'POST':
+				form_create_animateur = createAnimateurForm(sejour_id, request.POST)
+				if form_create_animateur.is_valid():
+					user = form_create_animateur.save(request)
+					return redirect('/sejour/' + sejour_id)
 	else:
 		return redirect('/')
 
@@ -98,25 +94,27 @@ def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
 	saison = Saison.objects.all()
 	return saison
 
-def peut_voir_animateur(user, request):
-	req = RequestContext(request)
+# Droit de lier un animateur à un séjour
+# Si l'utilisateur est directeur du séjour
+def peut_creer_sejour_animateur(sejour, user):
 	if (user.is_superuser):
 		return True
-	else:
-		logger.error(user.email + u' à tenté de se connecter')
-		return False
+	sa = SejourAnimateur.objects.filter(sejour_id=sejour.id, animateur__personne__user__id=user.id)
+	if (len(sa)):
+		role = sa[0].role
+		if (role == 'D'):
+			return True
+	return False
 
+# Droit de voir un séjour
+# Si l'utilisateur fait parti de ce séjour
 def peut_voir_sejour(sejour, user):
-	# si super oui
 	if (user.is_superuser):
 		return True
-
-	# Si l'utilisateur fait partit de ce séjour il peut voir
 	sa = SejourAnimateur.objects.filter(sejour_id=sejour.id, animateur__personne__user__id=user.id)
 	if (len(sa)):
 		return True
-
-	logger.error(user.email + u' (n°' +str(user.id) + u') à tenté de voir le séjour n°' + str(sejour.id) + u' pas à lui')
+	logger.error(user.email + u' (n°' +str(user.id) + u') à tenté de voir le séjour n°' + str(sejour.id))
 	return False
 
 # renvoie l'utilisateur courant
