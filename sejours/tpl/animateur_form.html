@@ -1,0 +1,186 @@
+<form action="" method="post" class="form-horizontal" >
+	{% csrf_token %}
+	{{ personneform.non_field_errors }}
+	{{ animateurform.non_field_errors }}
+	<fieldset>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.nom.html_name }}'>{{ personneform.nom.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.nom.html_name }}' value='{{ personneform.nom.value }}' id='{{ personneform.nom.html_name }}' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.prenom.html_name }}'>{{ personneform.prenom.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.prenom.html_name }}' value='{{ personneform.prenom.value }}' id='{{ personneform.prenom.html_name }}' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.adresse.html_name }}'>{{ personneform.adresse.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.adresse.html_name }}' value='{{ personneform.adresse.value }}' id='{{ personneform.adresse.html_name }}' class='input-xlarge' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.ville.html_name }}'>{{ personneform.ville.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.ville.html_name }}' value='{{ personneform.ville.value }}' id='{{ personneform.ville.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.cp.html_name }}'>{{ personneform.cp.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.cp.html_name }}' value='{{ personneform.cp.value }}' id='{{ personneform.cp.html_name }}' class='input-small' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.pays.html_name }}'>{{ personneform.pays.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.pays.html_name }}' value='{{ personneform.pays.value }}' id='{{ personneform.pays.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.tel.html_name }}'>{{ personneform.tel.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.tel.html_name }}' value='{{ personneform.tel.value }}' id='{{ personneform.tel.html_name }}' class='input-small' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.mobile.html_name }}'>{{ personneform.mobile.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.mobile.html_name }}' value='{{ personneform.mobile.value }}' id='{{ personneform.mobile.html_name }}' class='input-small' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.fax.html_name }}'>{{ personneform.fax.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.fax.html_name }}' value='{{ personneform.fax.value }}' id='{{ personneform.fax.html_name }}' class='input-small' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.sexe.html_name }}_id'>{{ personneform.sexe.label }}:</label>
+			<div class='controls'>
+				{{ personneform.sexe }}
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.nationalite.html_name }}'>{{ personneform.nationalite.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.nationalite.html_name }}' value='{{ personneform.nationalite.value }}' id='{{ personneform.nationalite.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group{% if personneform.naissance_date.errors %} error{% endif %}'>
+			<label class='control-label' for='{{ personneform.naissance_date.html_name }}'>{{ personneform.naissance_date.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.naissance_date.html_name }}' value='{% if personneform.naissance_date.value %}{{ personneform.naissance_date.value|date:"d/m/Y" }}{% endif %}' id='{{ personneform.naissance_date.html_name }}' class='' />
+				{% if personneform.naissance_date.errors %}<span class="help-inline">{% for error in personneform.naissance_date.errors %}{{ error }}{% endfor %}</span>{% endif %}
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.naissance_ville.html_name }}'>{{ personneform.naissance_ville.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.naissance_ville.html_name }}' value='{{ personneform.naissance_ville.value }}' id='{{ personneform.naissance_ville.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ personneform.naissance_departement.html_name }}'>{{ personneform.naissance_departement.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ personneform.naissance_departement.html_name }}' value='{{ personneform.naissance_departement.value }}' id='{{ personneform.naissance_departement.html_name }}' class='input-small' />
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.secu_num.html_name }}'>{{ animateurform.secu_num.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ animateurform.secu_num.html_name }}' value='{{ animateurform.secu_num.value }}' id='{{ animateurform.secu_num.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.bafa.html_name }}'>{{ animateurform.bafa.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.bafa.html_name }}' {% if animateurform.bafa.value %}checked='checked'{% endif %} id='{{ animateurform.bafa.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.afps.html_name }}'>{{ animateurform.afps.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.afps.html_name }}' {% if animateurform.afps.value %}checked='checked'{% endif %} id='{{ animateurform.afps.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.psc1.html_name }}'>{{ animateurform.psc1.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.psc1.html_name }}' {% if animateurform.psc1.value %}checked='checked'{% endif %} id='{{ animateurform.psc1.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.psc2.html_name }}'>{{ animateurform.psc2.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.psc2.html_name }}' {% if animateurform.psc2.value %}checked='checked'{% endif %} id='{{ animateurform.psc2.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.bafd.html_name }}'>{{ animateurform.bafd.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.bafd.html_name }}' {% if animateurform.bafd.value %}checked='checked'{% endif %} id='{{ animateurform.bafd.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.bnssa.html_name }}'>{{ animateurform.bnssa.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.bnssa.html_name }}' {% if animateurform.bnssa.value %}checked='checked'{% endif %} id='{{ animateurform.bnssa.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.sb.html_name }}'>{{ animateurform.sb.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.sb.html_name }}' {% if animateurform.sb.value %}checked='checked'{% endif %} id='{{ animateurform.sb.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.expe_handicap.html_name }}'>{{ animateurform.expe_handicap.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.expe_handicap.html_name }}' {% if animateurform.expe_handicap.value %}checked='checked'{% endif %} id='{{ animateurform.expe_handicap.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.expe_sejour.html_name }}'>{{ animateurform.expe_sejour.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.expe_sejour.html_name }}' {% if animateurform.expe_sejour.value %}checked='checked'{% endif %} id='{{ animateurform.expe_sejour.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.texte.html_name }}'>{{ animateurform.texte.label }}:</label>
+			<div class='controls'>
+				<textarea name='{{ animateurform.texte.html_name }}' id='{{ animateurform.texte.html_name }}' rows='4'>{{ animateurform.texte.value }}</textarea>
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.identite_num.html_name }}'>{{ animateurform.identite_num.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ animateurform.identite_num.html_name }}' value='{{ animateurform.identite_num.value }}' id='{{ animateurform.identite_num.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.permis_num.html_name }}'>{{ animateurform.permis_num.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ animateurform.permis_num.html_name }}' value='{{ animateurform.permis_num.value }}' id='{{ animateurform.permis_num.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group{% if animateurform.permis_date.errors %} error{% endif %}'>
+			<label class='control-label' for='{{ animateurform.permis_date.html_name }}'>{{ animateurform.permis_date.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ animateurform.permis_date.html_name }}' value='{% if animateurform.permis_date.value %}{{ animateurform.permis_date.value|date:"d/m/Y" }}{% endif %}' id='{{ animateurform.permis_date.html_name }}' class='' />
+				{% if animateurform.permis_date.errors %}<span class="help-inline">{% for error in animateurform.permis_date.errors %}{{ error }}{% endfor %}</span>{% endif %}
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.carte_sejour_num.html_name }}'>{{ animateurform.carte_sejour_num.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ animateurform.carte_sejour_num.html_name }}' value='{{ animateurform.carte_sejour_num.value }}' id='{{ animateurform.carte_sejour_num.html_name }}' class='' />
+			</div>
+		</div>
+	</fieldset>
+	<button type="submit" class="btn btn-primary">Valider</button>
+</form>
