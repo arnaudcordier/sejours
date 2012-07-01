@@ -60,9 +60,10 @@ class createAnimateurForm(forms.Form):
 		nom = self.cleaned_data['nom']
 		prenom = self.cleaned_data['prenom']
 		email = self.cleaned_data['email']
+		role = self.cleaned_data['role']
 		new_user = UserenaSignup.objects.create_user(username, email, password, True, False) # activé, pas de mail
 		animateur_id = createAnimateur(nom, prenom, email, new_user.id)
-		sejour = SejourAnimateur(sejour_id=self.sejour_id, animateur_id=animateur_id, role='A')
+		sejour = SejourAnimateur(sejour_id=self.sejour_id, animateur_id=animateur_id, role=role)
 		sejour.save()
 		# envoi d'un mail d'invite à choisir un mot de passe
 		from django.core.mail import send_mail
@@ -85,10 +86,3 @@ class createAnimateurForm(forms.Form):
 		send_mail(subject, email, settings.DEFAULT_FROM_EMAIL, [new_user.email])
 				
 		return new_user
-
-def createAnimateur(nom, prenom, email, user_id):
-	personne = Personne(user_id = user_id, nom=nom, prenom=prenom, email=email)
-	personne.save()
-	animateur = Animateur(personne_id = personne.pk)
-	animateur.save()
-	return animateur.pk
