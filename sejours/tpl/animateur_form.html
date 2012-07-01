@@ -1,7 +1,20 @@
 <form action="" method="post" class="form-horizontal" >
 	{% csrf_token %}
-	{{ personneform.non_field_errors }}
-	{{ animateurform.non_field_errors }}
+	{% if personneform.errors or animateurform.errors %}
+	<div class='control-group error'>
+		<div class='help-block'>
+			Le formulaire n'a pu être validé, il contient des erreurs.
+		</div>
+	</div>
+	{% endif %}
+	{% if personneform.non_field_errors or animateurform.non_field_errors %}
+	<div class='control-group error'>
+		<div class='help-block'>
+			{{ personneform.non_field_errors }}
+			{{ animateurform.non_field_errors }}
+		</div>
+	</div>
+	{% endif %}
 	<fieldset>
 		<div class='control-group'>
 			<label class='control-label' for='{{ personneform.nom.html_name }}'>{{ personneform.nom.label }}:</label>
