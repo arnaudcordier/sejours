@@ -1,5 +1,11 @@
 <ul>
-{% for sejour in sejours %}
-	<li><a href="{% url sejour sejour.id %}"{% if sejour_id == sejour.id %} class="selected" {% endif %}>{{ sejour }}</a></li>
+{% for s in sejours %}
+	<li>
+	{% if sejour.id == s.id %}
+		<strong>{{ s }}</strong>
+	{% else %}
+		<a href="{% url sejour s.id %}">{{ s }}</a>
+	{% endif %}
+	</li>
 {% endfor %}
 </ul>
