@@ -30,7 +30,7 @@
 		{% if peut_creer_sa %}
 		<td>
 			{% if user.id != sa.animateur.personne.user.id %}
-				<form method='post' action=''>{% csrf_token %}
+				<form method='post' action='' class='deleteSA' >{% csrf_token %}
 					<input type='hidden' name='sa_id' value='{{ sa.pk }}' />
 					<input type='submit' value='Effacer' class='btn btn-danger' />
 				</form>
@@ -69,4 +69,14 @@
 	</form>
 {% endif %}
 
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+$(function(){
+	$('.deleteSA').submit(function(){
+		return confirm('Êtes-vous sûr de vouloir enlever cet animateur ?');
+	});
+});
+</script>
 {% endblock %}
