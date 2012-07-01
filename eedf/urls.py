@@ -14,7 +14,8 @@ urlpatterns = patterns('sejours.views',
 	url(r'^convoyage/(?P<convoyage_id>\d+)$','convoyage', name='convoyage'),
 	url(r'^sejour/(?P<sejour_id>\d+)$','sejour', name='sejour'),
 	url(r'^(?P<saison_id>\d+)/sejours$','sejours', name='sejours'),
-)
+	url(r'^animateur/(?P<animateur_id>\d+)$','animateur', name='animateur'),
+	)
 
 urlpatterns += patterns('',
 	(r'^accounts/reset/$',

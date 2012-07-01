@@ -22,7 +22,13 @@
 	</tr>
 {% for sa in sejour.sejouranimateur_set.all %}
 	<tr>
-		<td>{{ sa.animateur }}</td>
+		<td>
+			{% if user.is_superuser %}
+				<a href='{% url animateur sa.animateur.id %}'>{{ sa.animateur }}</a>
+			{% else %}
+				{{ sa.animateur }}
+			{% endif %}
+		</td>
 		<td>{{ sa.get_role_display }}</td>
 		<td>{{ sa.animateur.personne.user.email }}</td>
 		<td>{{ sa.animateur.personne.tel }}</td>

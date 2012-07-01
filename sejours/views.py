@@ -32,6 +32,26 @@ def mafiche(request):
 		context_instance=RequestContext(request)
 	)
 
+@permission_required('user.is_superuser')
+def animateur(request, animateur_id):
+	animateur = get_object_or_404(Animateur, pk=animateur_id)
+	personne = Personne.objects.get(animateur__id=animateur_id)
+	if request.method == 'POST':
+		personneform = personneForm(request.POST, instance=personne)
+		animateurform = animateurForm(request.POST, instance=animateur)
+		if animateurform.is_valid() and personneform.is_valid():
+			personneform.save()
+			animateurform.save()
+			return redirect('/animateur/'+animateur_id)
+	else:
+		personneform = personneForm(instance=personne)
+		animateurform = animateurForm(instance=animateur)
+
+	return render_to_response('animateur.html',
+	{'personne': personne, 'lessaisons': lessaisons(), 'animateur':animateur, 'personneform':personneform, 'animateurform':animateurform },
+	context_instance=RequestContext(request)
+	)
+
 @login_required
 def saison(request, saison_id):
 	saison = get_object_or_404(Saison, pk=saison_id)
