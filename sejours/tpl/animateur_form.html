@@ -85,7 +85,7 @@
 		<div class='control-group{% if personneform.naissance_date.errors %} error{% endif %}'>
 			<label class='control-label' for='{{ personneform.naissance_date.html_name }}'>{{ personneform.naissance_date.label }}:</label>
 			<div class='controls'>
-				<input type='text' name='{{ personneform.naissance_date.html_name }}' value='{% if personneform.naissance_date.value %}{{ personneform.naissance_date.value|date:"d/m/Y" }}{% endif %}' id='{{ personneform.naissance_date.html_name }}' class='' />
+				<input type='text' name='{{ personneform.naissance_date.html_name }}' value='{% if personneform.naissance_date.value %}{{ personneform.naissance_date.value|date:"d/m/Y" }}{% endif %}' id='{{ personneform.naissance_date.html_name }}' class='date' readonly='readonly' style='cursor:inherit;'/>
 				{% if personneform.naissance_date.errors %}<span class="help-inline">{% for error in personneform.naissance_date.errors %}{{ error }}{% endfor %}</span>{% endif %}
 			</div>
 		</div>
@@ -184,7 +184,7 @@
 		<div class='control-group{% if animateurform.permis_date.errors %} error{% endif %}'>
 			<label class='control-label' for='{{ animateurform.permis_date.html_name }}'>{{ animateurform.permis_date.label }}:</label>
 			<div class='controls'>
-				<input type='text' name='{{ animateurform.permis_date.html_name }}' value='{% if animateurform.permis_date.value %}{{ animateurform.permis_date.value|date:"d/m/Y" }}{% endif %}' id='{{ animateurform.permis_date.html_name }}' class='' />
+				<input type='text' name='{{ animateurform.permis_date.html_name }}' value='{% if animateurform.permis_date.value %}{{ animateurform.permis_date.value|date:"d/m/Y" }}{% endif %}' id='{{ animateurform.permis_date.html_name }}' class='date' readonly='readonly' style='cursor:inherit;' />
 				{% if animateurform.permis_date.errors %}<span class="help-inline">{% for error in animateurform.permis_date.errors %}{{ error }}{% endfor %}</span>{% endif %}
 			</div>
 		</div>
