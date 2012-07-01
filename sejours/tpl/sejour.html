@@ -11,13 +11,14 @@
 <h2>Du {{ sejour.date_debut }} au {{ sejour.date_fin }} à {{ sejour.structure.ville }}</h2>
 
 <table class='animateur'>
-	<tr><th colspan="5">Les animateurs</th></tr>
+	<tr><th colspan="{% if peut_creer_sa %}6{% else %}5{% endif %}">Les animateurs</th></tr>
 	<tr>
 		<th>Nom Prénom</th>
 		<th>Fonction</th>
 		<th>Mail</th>
 		<th>Tel</th>
 		<th>Portable</th>
+		{% if peut_creer_sa %}<th>Effacer</th>{% endif %}
 	</tr>
 {% for sa in sejour.sejouranimateur_set.all %}
 	<tr>
@@ -26,6 +27,16 @@
 		<td>{{ sa.animateur.personne.user.email }}</td>
 		<td>{{ sa.animateur.personne.tel }}</td>
 		<td>{{ sa.animateur.personne.mobile }}</td>
+		{% if peut_creer_sa %}
+		<td>
+			{% if user.id != sa.animateur.personne.user.id %}
+				<form method='post' action=''>{% csrf_token %}
+					<input type='hidden' name='sa_id' value='{{ sa.pk }}' />
+					<input type='submit' value='Effacer' class='btn btn-danger' />
+				</form>
+			{% endif %}
+		</td>
+		{% endif %}
 	</tr>
 {% endfor %}
 </table>
