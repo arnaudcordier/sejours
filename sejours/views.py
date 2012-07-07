@@ -98,7 +98,7 @@ def sejour(request, sejour_id):
 					sa.delete()
 					return redirect('/sejour/' + sejour_id)
 				else:
-					form_create_animateur = createAnimateurForm(sejour_id, request.POST)
+					form_create_animateur = createAnimateurForm(sejour_id, request.POST, sans_directeur=sans_directeur)
 					if form_create_animateur.is_valid():
 						user = form_create_animateur.save(request)
 						return redirect('/sejour/' + sejour_id)
