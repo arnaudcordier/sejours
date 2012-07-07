@@ -26,6 +26,23 @@ class animateurForm(ModelForm):
 		model = Animateur
 		exclude = ('personne')
 
+#Lier un animateur à un séjour
+class sejourAnimateurForm(ModelForm):
+	class Meta:
+		model = SejourAnimateur
+		exclude = ('sejour','animateur','date_debut','date_fin')
+	
+	def __init__(self, animateur, sejour, *args, **kwargs):
+		super(sejourAnimateurForm, self).__init__(*args, **kwargs)
+		self.animateur = animateur
+		self.sejour = sejour
+
+	def save(self, request):
+		role = self.cleaned_data['role']
+		sa = SejourAnimateur(sejour_id=self.sejour.id, animateur_id=self.animateur.id, role=role)
+		sa.save()
+		return sa
+
 class createAnimateurForm(forms.Form):
 	nom = forms.CharField(label=u'Nom', max_length=30, required=False)
 	prenom = forms.CharField(label=u'Prénom', max_length=30, required=False)

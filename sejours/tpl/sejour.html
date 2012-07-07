@@ -75,6 +75,20 @@
 	</form>
 {% endif %}
 
+{% if sejourAnimateurForm %}
+	<form method='post' action=''>
+		{% csrf_token %}
+		<fieldset>
+			<input type="hidden" name="animateurId" value="{{ sejourAnimateurForm.animateur.id }}" />
+			<legend>Lier cet animateur</legend>
+			<p>L'animateur <strong>{{ sejourAnimateurForm.animateur }}</strong> existe déjà!</p>
+			<p>Voulez-vous le lier au séjour «{{ sejourAnimateurForm.sejour }}» ?</p>
+			{{ sejourAnimateurForm.as_p }}
+			<p><input type='submit' value='Lier' name='sa_form' /></p>
+		</fieldset>
+	</form>
+{% endif %}
+
 {% endblock %}
 
 {% block script %}
