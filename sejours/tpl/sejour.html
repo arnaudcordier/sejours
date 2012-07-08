@@ -81,7 +81,7 @@
 		<fieldset>
 			<input type="hidden" name="animateurId" value="{{ sejourAnimateurForm.animateur.id }}" />
 			<legend>Lier cet animateur</legend>
-			<p>L'animateur <strong>{{ sejourAnimateurForm.animateur }}</strong> existe déjà!</p>
+			<p>L'animateur <strong><a href="{% url animateur sejourAnimateurForm.animateur.id %}">{{ sejourAnimateurForm.animateur }}</a></strong> existe déjà!</p>
 			<p>Voulez-vous le lier au séjour «{{ sejourAnimateurForm.sejour }}» ?</p>
 			{{ sejourAnimateurForm.as_p }}
 			<p><input type='submit' value='Lier' name='sa_form' /></p>
