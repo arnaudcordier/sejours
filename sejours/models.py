@@ -201,7 +201,7 @@ class Convoyage(models.Model):
 	texte = models.TextField(verbose_name=u'Présentation', blank=True)
 	info = models.TextField(verbose_name=u'Informations', blank=True)
 	def __unicode__(self):
-		return self.saison.__unicode__()
+		return self.bus.__unicode__() + ' ' +self.saison.__unicode__() + ' ' + self.depart().ville + ' -> ' + self.arrivee().ville
 	def depart(self):
 		e = self.etape_set.order_by('date_arrivee')[0]
 		return e
@@ -217,8 +217,10 @@ class Etape(models.Model):
 	date_depart = models.DateTimeField(verbose_name=u'Date et heure de départ')
 	info = models.TextField(verbose_name=u'Informations', blank=True)
 	souhaits = models.ManyToManyField(Animateur, through='EtapeSouhait', related_name='souhaits')
+	entree = models.SmallIntegerField(verbose_name=u'Entrée', blank=True, null=True)
+	sortie = models.SmallIntegerField(verbose_name=u'Sortie', blank=True, null=True)
 	def __unicode__(self):
-		return self.ville
+		return self.ville + ' (' + self.convoyage.__unicode__() +')'
 	def vacancierEntree(self):
 		return ConvoyageVacancier.objects.filter(convoyage = self.convoyage, entree = self.id).count()
 	def vacancierSortie(self):
@@ -238,7 +240,7 @@ class ConvoyageVacancier(models.Model):
 		return self.vacancier.__unicode__()
 
 class ConvoyageAnimateur(models.Model):
-	CONVOYEUR_ROLE = ((u'R', u'Responsable'),(u'M', u'Responsable médicament'),(u'C', u'Convoyeur'),(u'V', u'Voyageur'))
+	CONVOYEUR_ROLE = ((u'R', u'Responsable'),(u'M', u'Responsable médicament'),(u'A', u'Responsable accueil'),(u'B', u'Responsable bagage'),(u'C', u'Convoyeur'),(u'V', u'Voyageur'))
 	convoyage = models.ForeignKey(Convoyage, verbose_name=u'Convoyage')
 	entree = models.ForeignKey(Etape, verbose_name=u'Étape entrée', related_name='animateursentrees')
 	sortie = models.ForeignKey(Etape, verbose_name=u'Étape sortie', related_name='animateurssorties')
