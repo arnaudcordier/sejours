@@ -15,6 +15,7 @@ urlpatterns = patterns('sejours.views',
 	url(r'^sejour/(?P<sejour_id>\d+)$','sejour', name='sejour'),
 	url(r'^(?P<saison_id>\d+)/sejours$','sejours', name='sejours'),
 	url(r'^animateur/(?P<animateur_id>\d+)$','animateur', name='animateur'),
+	url(r'^rechercheanimateur/(?P<recherche>.+)$','rechercheanimateur', name='rechercheanimateur'),
 	)
 
 urlpatterns += patterns('',

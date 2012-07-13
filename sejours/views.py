@@ -6,7 +6,10 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import PasswordResetForm
 from userena import views as userena_views
+from django.http import HttpResponse
+from django.db.models import Q
 
+import simplejson
 import logging
 logger = logging.getLogger('eedf')
 
@@ -145,6 +148,17 @@ def sejours(request, saison_id):
 		{'sejours': sejours, 'lessaisons': lessaisons()},
 		context_instance=RequestContext(request)
 	)
+
+@permission_required('user.is_superuser')
+def rechercheanimateur(request, recherche):
+	#logger.error(recherche)
+	animateurs = Animateur.objects.select_related().filter(Q(personne__nom__icontains=recherche) | Q(personne__prenom__icontains=recherche) | Q(personne__user__email__icontains=recherche))
+	if animateurs:
+		json = simplejson.dumps([({'id':animateur.id, 'nom':animateur.personne.nom, 'prenom':animateur.personne.prenom, 'email':animateur.personne.user.email}) for animateur in animateurs])
+	else:
+		json = simplejson.dumps({})
+		
+	return HttpResponse(json, 'content-Type: text/json; charset:UTF-8')
 
 @login_required
 def index(request):
