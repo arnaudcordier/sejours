@@ -36,7 +36,7 @@
 		{% if peut_creer_sa %}
 		<td>
 			{% if user.id != sa.animateur.personne.user.id %}
-				<form method='post' action='' class='deleteSA' >{% csrf_token %}
+				<form method='post' class='deleteSA' action="." >{% csrf_token %}
 					<input type='hidden' name='sa_id' value='{{ sa.pk }}' />
 					<input type='submit' value='Effacer' class='btn btn-danger' />
 				</form>
@@ -65,7 +65,7 @@
 </table>
 
 {% if form_create_animateur %}
-	<form method='post' action=''>
+	<form method='post' action="." >
 		{% csrf_token %}
 		<fieldset>
 			<legend>Créer un animateur pour ce séjour</legend>
@@ -76,7 +76,7 @@
 {% endif %}
 
 {% if sejourAnimateurForm %}
-	<form method='post' action=''>
+	<form method='post' action="." >
 		{% csrf_token %}
 		<fieldset>
 			<input type="hidden" name="animateurId" value="{{ sejourAnimateurForm.animateur.id }}" />

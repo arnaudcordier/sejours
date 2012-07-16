@@ -1,4 +1,4 @@
-<form action="" method="post" class="form-horizontal" >
+<form method="post" class="form-horizontal" action="." >
 	{% csrf_token %}
 	{% if personneform.errors or animateurform.errors %}
 	<div class='control-group error'>
@@ -71,7 +71,7 @@
 			</div>
 		</div>
 		<div class='control-group'>
-			<label class='control-label' for='{{ personneform.sexe.html_name }}_id'>{{ personneform.sexe.label }}:</label>
+			<label class='control-label' for='id_{{ personneform.sexe.html_name }}'>{{ personneform.sexe.label }}:</label>
 			<div class='controls'>
 				{{ personneform.sexe }}
 			</div>

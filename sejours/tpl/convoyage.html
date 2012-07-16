@@ -102,7 +102,7 @@
 
 {% if caForm %}
 <h2>Ajouter un convoyeur</h2>
-<form method="post" action="" class="form-horizontal">
+<form method="post" class="form-horizontal" action="." >
 	{% csrf_token %}
 	<fieldset>
 		<input type="hidden" name="{{ caForm.convoyage.html_name }}" value="{{ convoyage.id }}" />
@@ -117,7 +117,7 @@
 			</div>
 		</div>
 		<div class='control-group{% if caForm.role.errors %} error{% endif %}'>
-			<label class='control-label' for='{{ caForm.role.html_name }}'>{{ caForm.role.label }}:</label>
+			<label class='control-label' for='id_{{ caForm.role.html_name }}'>{{ caForm.role.label }}:</label>
 			<div class='controls'>
 				{{ caForm.role }}
 				{% if caForm.role.errors %}
