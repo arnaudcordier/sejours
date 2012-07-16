@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from userena.models import UserenaBaseProfile
 from django.dispatch import receiver
 from userena.signals import *
+from django.db.models import Count, Sum
 
 import logging
 logger = logging.getLogger('eedf')
@@ -229,6 +230,18 @@ class Etape(models.Model):
 		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, entree = self.id).count()
 	def animateurSortie(self):
 		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, sortie = self.id).count()
+	def entrees(self):
+		totalEntree = Etape.objects.filter(convoyage = self.convoyage, date_arrivee__lte = self.date_depart).aggregate(Sum('entree'))
+		return totalEntree['entree__sum']
+	def sorties(self):
+		totalSortie = Etape.objects.filter(convoyage = self.convoyage, date_arrivee__lte = self.date_depart).aggregate(Sum('sortie'))
+		return totalSortie['sortie__sum']
+	def total(self):
+		entrees = self.entrees()
+		sorties = self.sorties()
+		if (not entrees): entrees = 0
+		if (not sorties): sorties = 0
+		return entrees - sorties
 
 class ConvoyageVacancier(models.Model):
 	convoyage = models.ForeignKey(Convoyage, verbose_name=u'Convoyage')

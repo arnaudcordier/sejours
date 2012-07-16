@@ -3,7 +3,7 @@
 {% block title %}Convoyage: {{ convoyage }}{% endblock %}
 
 {% block content %}
-<h1>Convoyage {{ convoyage }} de {{ convoyage.depart }} à {{ convoyage.arrivee }}</h1>
+<h1>Convoyage {{ convoyage }}</h1>
 
 <table class='animateur'>
 	<tr><th colspan="6">Les animateurs</th></tr>
@@ -49,7 +49,7 @@
 <br/>
 <table class='etape'>
 	<tr>
-		<th colspan="5">
+		<th colspan="6">
 			Les étapes du {{ convoyage.depart.date_arrivee|date:"d m Y" }}
 			{% if convoyage.depart.date_arrivee|date:"d m Y" != convoyage.arrivee.date_arrivee|date:"d m Y" %}
 				au {{ convoyage.arrivee.date_arrivee|date:"d m Y" }}
@@ -60,19 +60,20 @@
 		<th>Ville</th>
 		<th>Arrivée</th>
 		<th>Départ</th>
-		<th>Nombre de vacanciers</th>
-		<th>Nombre d'animateurs</th>
+		<th>Entrées</th>
+		<th>Sorties</th>
+		<th>Total</th>
 	</tr>
 {% for e in convoyage.etape_set.all %}
 	<tr>
 		<td>{{e}}</td>
 		<td>{{ e.date_arrivee|date:"H:i" }}</td>
 		<td>{{ e.date_depart|date:"H:i" }}</td>
-		<td>{{ e.vacancierEntree }}</td>
-		<td>{{ e.animateurEntree }}</td>
+		<td>{{ e.entree|default_if_none:0 }}</td>
+		<td>{{ e.sortie|default_if_none:0 }}</td>
+		<td>{{ e.total }}</td>
 	</tr>
 {% endfor %}
 </table>
-
 
 {% endblock %}
