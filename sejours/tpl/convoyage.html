@@ -6,10 +6,11 @@
 <h1>Convoyage {{ convoyage }}</h1>
 
 <table class='animateur'>
-	<tr><th colspan="6">Les animateurs</th></tr>
+	<tr><th colspan="7">Les animateurs</th></tr>
 	<tr>
 		<th>Nom Prénom</th>
 		<th>Entrée</th>
+		<th>Sortie</th>
 		<th>Fonction</th>
 		<th>Mail</th>
 		<th>Tel</th>
@@ -18,7 +19,8 @@
 {% for ca in convoyage.convoyageanimateur_set.all %}
 	<tr>
 		<td>{{ ca.animateur }}</td>
-		<td>{{ ca.entree }}</td>
+		<td>{{ ca.entree.ville }}</td>
+		<td>{{ ca.sortie.ville }}</td>
 		<td>{{ ca.get_role_display }}</td>
 		<td>{{ ca.animateur.personne.email }}</td>
 		<td>{{ ca.animateur.personne.tel }}</td>
@@ -27,7 +29,7 @@
 {% endfor %}
 </table>
 
-<br/>
+<!--<br/>
 <table class='vacancier'>
 	<tr><th colspan="4">Les vacanciers</th></tr>
 	<tr>
@@ -44,7 +46,7 @@
 		<td>{% if cv.vacancier.traitement %}Oui{% else %}non{% endif %}</td>
 	</tr>
 {% endfor %}
-</table>
+</table>-->
 
 <br/>
 <table class='etape'>
@@ -66,14 +68,101 @@
 	</tr>
 {% for e in convoyage.etape_set.all %}
 	<tr>
-		<td>{{e}}</td>
+		<td>{{ e.ville }}</td>
 		<td>{{ e.date_arrivee|date:"H:i" }}</td>
 		<td>{{ e.date_depart|date:"H:i" }}</td>
 		<td>{{ e.entree|default_if_none:0 }}</td>
 		<td>{{ e.sortie|default_if_none:0 }}</td>
 		<td>{{ e.total }}</td>
 	</tr>
+	{% comment %}
+		{% for ae in e.animateurEntree %}
+		<tr>
+			<td>&nbsp;->&nbsp;</td>
+			<td>{{ ae.animateur }}</td>
+			<td>{{ ae.get_role_display }}</td>
+			<td>{{ ae.animateur.personne.email }}</td>
+			<td>{{ ae.animateur.personne.tel }}</td>
+			<td>{{ ae.animateur.personne.mobile }}</td>
+		</tr>
+		{% endfor %}
+		{% for ae in e.animateurSortie %}
+		<tr>
+			<td>&nbsp;<-&nbsp;</td>
+			<td>{{ ae.animateur }}</td>
+			<td>{{ ae.get_role_display }}</td>
+			<td>{{ ae.animateur.personne.email }}</td>
+			<td>{{ ae.animateur.personne.tel }}</td>
+			<td>{{ ae.animateur.personne.mobile }}</td>
+		</tr>
+		{% endfor %}
+	{% endcomment %}
 {% endfor %}
 </table>
 
+{% if caForm %}
+<h2>Ajouter un convoyeur</h2>
+<form method="post" action="" class="form-horizontal">
+	{% csrf_token %}
+	<fieldset>
+		<input type="hidden" name="{{ caForm.convoyage.html_name }}" value="{{ convoyage.id }}" />
+		<div class='control-group{% if caForm.animateur.errors %} error{% endif %}'>
+			<label class='control-label' for='{{ caForm.animateur.html_name }}_rech'>{{ caForm.animateur.label }}:</label>
+			<div class='controls'>
+				<input class="rechercheAnimateur" type="text" name="recherche" value="" id="{{ caForm.animateur.html_name }}_rech" />
+				<input type="hidden" name="{{ caForm.animateur.html_name }}" value="" />
+				{% if caForm.animateur.errors %}
+					<span class="help-inline">{% for error in caForm.animateur.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if caForm.role.errors %} error{% endif %}'>
+			<label class='control-label' for='{{ caForm.role.html_name }}'>{{ caForm.role.label }}:</label>
+			<div class='controls'>
+				{{ caForm.role }}
+				{% if caForm.role.errors %}
+					<span class="help-inline">{% for error in caForm.role.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if caForm.entree.errors %} error{% endif %}'>
+			<label class='control-label' for='{{ caForm.entree.html_name }}'>{{ caForm.entree.label }}:</label>
+			<div class='controls'>
+				<select name="{{ caForm.entree.html_name }}" id="{{ caForm.entree.html_name }}">
+				{% for e in convoyage.etape_set.all %}
+					<option value="{{ e.id }}"{% if forloop.first %} selected="selected" {% endif %}>{{ e.ville }}</option>
+				{% endfor %}
+				</select>
+				{% if caForm.entree.errors %}
+					<span class="help-inline">{% for error in caForm.entree.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if caForm.sortie.errors %} error{% endif %}'>
+			<label class='control-label' for='{{ caForm.sortie.html_name }}'>{{ caForm.sortie.label }}:</label>
+			<div class='controls'>
+				<select name="{{ caForm.sortie.html_name }}" id="{{ caForm.sortie.html_name }}">
+				{% for e in convoyage.etape_set.all %}
+					<option value="{{ e.id }}"{% if forloop.last %} selected="selected" {% endif %}>{{ e.ville }}</option>
+				{% endfor %}
+				</select>
+				{% if caForm.sortie.errors %}
+					<span class="help-inline">{% for error in caForm.sortie.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+	</fieldset>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary">Valider</button>
+	</div>
+</form>
+{% endif %}
+
 {% endblock %}
+
+{% if caForm %}
+{% load static %}
+{% block script %}
+		<script type="text/javascript" src="{% static "js/rechercheanimateur.js" %}" ></script>
+{% endblock %}
+{% endif %}

@@ -26,6 +26,10 @@ class animateurForm(ModelForm):
 		model = Animateur
 		exclude = ('personne')
 
+class convoyageAnimateurForm(ModelForm):
+	class Meta:
+		model = ConvoyageAnimateur
+
 #Lier un animateur à un séjour
 class sejourAnimateurForm(ModelForm):
 	class Meta:

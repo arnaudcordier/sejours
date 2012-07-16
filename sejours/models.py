@@ -223,13 +223,13 @@ class Etape(models.Model):
 	def __unicode__(self):
 		return self.ville + ' (' + self.convoyage.__unicode__() +')'
 	def vacancierEntree(self):
-		return ConvoyageVacancier.objects.filter(convoyage = self.convoyage, entree = self.id).count()
+		return ConvoyageVacancier.objects.filter(convoyage = self.convoyage, entree = self.id)
 	def vacancierSortie(self):
-		return ConvoyageVacancier.objects.filter(convoyage = self.convoyage, sortie = self.id).count()
+		return ConvoyageVacancier.objects.filter(convoyage = self.convoyage, sortie = self.id)
 	def animateurEntree(self):
-		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, entree = self.id).count()
+		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, entree = self.id)
 	def animateurSortie(self):
-		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, sortie = self.id).count()
+		return ConvoyageAnimateur.objects.filter(convoyage = self.convoyage, sortie = self.id)
 	def entrees(self):
 		totalEntree = Etape.objects.filter(convoyage = self.convoyage, date_arrivee__lte = self.date_depart).aggregate(Sum('entree'))
 		return totalEntree['entree__sum']
