@@ -9,11 +9,25 @@ Les convoyages de cette saison
 
 <ul>
 {% for c in convoyages %}
-	<li><a href="/convoyage/{{ c.id }}">{{ c }}</a> de {{ c.depart }} à {{ c.arrivee }}<ul>
-	{% for e in c.etape_set.all %}
-		<li>{{ e }}</li>
-	{% endfor %}
-	</ul></li>
+	<li>
+		{% if user.is_superuser %}
+			<a href="/convoyage/{{ c.id }}">{{ c.bus }}</a>
+		{% else %}
+			{{ c.bus }}
+		{% endif %}
+		de {{ c.depart.ville }} à {{ c.arrivee.ville }}.
+		
+		{% regroup c.etape_set.all|dictsort:"date_depart" by date_depart as etapes %}
+		{% for es in etapes %}
+			{% if forloop.first %}
+			{% for e in es.list %}Le {{e.date_arrivee|date:"d m Y"}}{% endfor %}<ul>
+			{% endif %}
+				{% for e in es.list %}
+				<li>{{ e.ville }} : Arrivée: {{e.date_arrivee|date:"H:i"}}, Départ: {{e.date_depart|date:"H:i"}}</li>
+				{% endfor %}
+			{% if forloop.last %}</ul>{% endif %}
+		{% endfor %}
+	</li>
 {% endfor %}
 </ul>
 
