@@ -3,12 +3,12 @@ $(".rechercheAnimateur").autocomplete({
 		$.ajax({
 			url: '/rechercheanimateur/'+request.term,
 			success: function( data ) {
-				// 				console.log(data);
+// 				console.log(data);
 				response( $.map( data, function( item ) {
 					return {
 						label: item.prenom + " " + item.nom + " (" + item.email + ")",
-												 value: item.prenom + " " + item.nom,
-										 id: item.id
+						value: item.prenom + " " + item.nom,
+						id: item.id
 					}
 				}));
 			}
@@ -16,14 +16,7 @@ $(".rechercheAnimateur").autocomplete({
 	},
 	minLength: 3,
 	select: function( event, ui ) {
-		// 		console.log( ui.item ?
-		// 			"Selected: " + ui.item.label + "," + ui.item.id :
-		// 			"Nothing selected, input was " + this.value);
-	},
-	open: function() {
-		$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-	},
-	close: function() {
-		$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+		$hidden = $(this).next('input[type="hidden"]');
+		$hidden.val(ui.item.id);
 	}
 });
