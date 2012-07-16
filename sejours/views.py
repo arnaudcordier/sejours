@@ -68,19 +68,23 @@ def saison(request, saison_id):
 def convoyage(request, convoyage_id):
 	user = getCurrentUser(request)
 	convoyage = get_object_or_404(Convoyage, pk=convoyage_id)
-	caForm = ''
-	if (user.is_superuser):
-		if request.method == 'POST':
-			caForm = convoyageAnimateurForm(request.POST)
-			if caForm.is_valid():
-				caForm.save()
-				return redirect('/convoyage/'+convoyage_id)
-		else:
-			caForm = convoyageAnimateurForm() 
-	return render_to_response('convoyage.html',
-	{'convoyage': convoyage, 'lessaisons': lessaisons(), 'caForm':caForm},
-		context_instance=RequestContext(request)
-	)
+	# être admin ou être lié à ce séjour
+	if (peut_voir_convoyage(convoyage, user)):
+		caForm = ''
+		if (user.is_superuser):
+			if request.method == 'POST':
+				caForm = convoyageAnimateurForm(request.POST)
+				if caForm.is_valid():
+					caForm.save()
+					return redirect('/convoyage/'+convoyage_id)
+			else:
+				caForm = convoyageAnimateurForm() 
+		return render_to_response('convoyage.html',
+		{'convoyage': convoyage, 'lessaisons': lessaisons(), 'caForm':caForm},
+			context_instance=RequestContext(request)
+		)
+	else:
+		return redirect('/')
 
 @login_required
 def sejour(request, sejour_id):
@@ -202,6 +206,17 @@ def peut_voir_sejour(sejour, user):
 	if (len(sa)):
 		return True
 	logger.error(user.email + u' (n°' +str(user.id) + u') à tenté de voir le séjour n°' + str(sejour.id))
+	return False
+
+# Droit de voir un convoyage
+# Si l'utilisateur fait parti de ce séjour
+def peut_voir_convoyage(convoyage, user):
+	if (user.is_superuser):
+		return True
+	ca = ConvoyageAnimateur.objects.filter(convoyage_id=convoyage.id, animateur__personne__user__id=user.id)
+	if (len(ca)):
+		return True
+	logger.error(user.email + u' (n°' +str(user.id) + u') à tenté de voir le convoyage n°' + str(convoyage.id))
 	return False
 
 # renvoie l'utilisateur courant
