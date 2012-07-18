@@ -9,6 +9,7 @@ from django.template import loader
 from django.utils.http import int_to_base36
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import get_current_site
+from django.forms.models import modelformset_factory
 
 import random
 
@@ -29,6 +30,12 @@ class animateurForm(ModelForm):
 class convoyageAnimateurForm(ModelForm):
 	class Meta:
 		model = ConvoyageAnimateur
+
+class etapeForm(ModelForm):
+	class Meta:
+		model = Etape
+
+etapeFormSet = modelformset_factory(Etape, extra=0)
 
 #Lier un animateur à un séjour
 class sejourAnimateurForm(ModelForm):

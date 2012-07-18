@@ -217,7 +217,7 @@ class Etape(models.Model):
 	date_arrivee = models.DateTimeField(verbose_name=u'Date et heure d\'arrivée')
 	date_depart = models.DateTimeField(verbose_name=u'Date et heure de départ')
 	info = models.TextField(verbose_name=u'Informations', blank=True)
-	souhaits = models.ManyToManyField(Animateur, through='EtapeSouhait', related_name='souhaits')
+	#souhaits = models.ManyToManyField(Animateur, through='EtapeSouhait', related_name='souhaits', blank=True)
 	entree = models.SmallIntegerField(verbose_name=u'Entrée', blank=True, null=True)
 	sortie = models.SmallIntegerField(verbose_name=u'Sortie', blank=True, null=True)
 	def __unicode__(self):

@@ -74,7 +74,9 @@
 			<th>Total</th>
 		</tr>
 	</thead>
-	{% for e in convoyage.etape_set.all %}
+	{% regroup convoyage.etape_set.all|dictsort:"date_depart" by date_depart as etapes %}
+	{% for es in etapes %}
+	{% for e in es.list %}
 	<tr>
 		<td>{{ e.ville }}</td>
 		<td>{{ e.date_arrivee|date:"H:i" }}</td>
@@ -105,6 +107,7 @@
 		</tr>
 		{% endfor %}
 	{% endcomment %}
+	{% endfor %}
 	{% endfor %}
 </table>
 
@@ -161,10 +164,131 @@
 		</div>
 	</fieldset>
 	<div class="form-actions">
-		<button type="submit" class="btn btn-primary">Valider</button>
+		<button type="submit" class="btn btn-primary" name="caForm" >Valider</button>
 	</div>
 </form>
 {% endif %}
+
+{% if eFormSet %}
+<h2>Modifier les étapes</h2>
+<form method="post" class="form-horizontal" >
+	{% csrf_token %}
+	{{ eFormSet.management_form }}
+	{% for form in eFormSet %}
+	<fieldset>
+		{{ form.id }}
+		<input type="hidden" name="{{ form.convoyage.html_name}}" value="{{ form.convoyage.value }}" />
+		<div class='control-group{% if form.ville.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ form.ville.html_name }}'>{{ form.ville.label }}:</label>
+			<div class='controls'>
+				{{ form.ville }}
+				{% if form.ville.errors %}
+					<span class="help-inline">{% for error in form.ville.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if form.date_arrivee.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ form.date_arrivee.html_name }}'>{{ form.date_arrivee.label }}:</label>
+			<div class='controls'>
+				{{ form.date_arrivee }}
+				{% if form.date_arrivee.errors %}
+					<span class="help-inline">{% for error in form.date_arrivee.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if form.date_depart.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ form.date_depart.html_name }}'>{{ form.date_depart.label }}:</label>
+			<div class='controls'>
+				{{ form.date_depart }}
+				{% if form.date_depart.errors %}
+					<span class="help-inline">{% for error in form.date_depart.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if form.entree.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ form.entree.html_name }}'>{{ form.entree.label }}:</label>
+			<div class='controls'>
+				{{ form.entree }}
+				{% if form.entree.errors %}
+					<span class="help-inline">{% for error in form.entree.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if form.sortie.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ form.sortie.html_name }}'>{{ form.sortie.label }}:</label>
+			<div class='controls'>
+				{{ form.sortie }}
+				{% if form.sortie.errors %}
+					<span class="help-inline">{% for error in form.sortie.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+	</fieldset>
+	{% endfor %}
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary" name="eFormSet" >Valider</button>
+	</div>
+</form>
+{% endif %}
+
+{% if eForm %}
+<h2>Ajouter une étape</h2>
+<form method="post" class="form-horizontal" >
+	{% csrf_token %}
+	<fieldset>
+		<input type="hidden" name="{{ eForm.convoyage.html_name}}" value="{{ convoyage.id }}" />
+		<div class='control-group{% if eForm.ville.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ eForm.ville.html_name }}'>{{ eForm.ville.label }}:</label>
+			<div class='controls'>
+				{{ eForm.ville }}
+				{% if eForm.ville.errors %}
+					<span class="help-inline">{% for error in eForm.ville.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if eForm.date_arrivee.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ eForm.date_arrivee.html_name }}'>{{ eForm.date_arrivee.label }}:</label>
+			<div class='controls'>
+				{{ eForm.date_arrivee }}
+				{% if eForm.date_arrivee.errors %}
+					<span class="help-inline">{% for error in eForm.date_arrivee.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if eForm.date_depart.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ eForm.date_depart.html_name }}'>{{ eForm.date_depart.label }}:</label>
+			<div class='controls'>
+				{{ eForm.date_depart }}
+				{% if eForm.date_depart.errors %}
+					<span class="help-inline">{% for error in eForm.date_depart.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if eForm.entree.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ eForm.entree.html_name }}'>{{ eForm.entree.label }}:</label>
+			<div class='controls'>
+				{{ eForm.entree }}
+				{% if eForm.entree.errors %}
+					<span class="help-inline">{% for error in eForm.entree.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+		<div class='control-group{% if eForm.sortie.errors %} error{% endif %}'>
+			<label class='control-label' for='id_{{ eForm.sortie.html_name }}'>{{ eForm.sortie.label }}:</label>
+			<div class='controls'>
+				{{ eForm.sortie }}
+				{% if eForm.sortie.errors %}
+					<span class="help-inline">{% for error in eForm.sortie.errors %}{{ error }}{% endfor %}</span>
+				{% endif %}
+			</div>
+		</div>
+	</fieldset>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary" name="eForm" >Valider</button>
+	</div>
+</form>
+{% endif %}
+
 
 {% endblock %}
 

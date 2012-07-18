@@ -71,16 +71,34 @@ def convoyage(request, convoyage_id):
 	# être admin ou être lié à ce séjour
 	if (peut_voir_convoyage(convoyage, user)):
 		caForm = ''
+		eFormSet = ''
+		eForm = ''
 		if (user.is_superuser):
 			if request.method == 'POST':
-				caForm = convoyageAnimateurForm(request.POST)
-				if caForm.is_valid():
-					caForm.save()
+				redir = False
+				if ('caForm' in request.POST):
+					caForm = convoyageAnimateurForm(request.POST)
+					if caForm.is_valid():
+						caForm.save()
+						redir = True
+				elif ('eFormSet' in request.POST):
+					eFormSet = etapeFormSet(request.POST, queryset=Etape.objects.filter(convoyage_id=convoyage.id).order_by('date_arrivee'))
+					if eFormSet.is_valid():
+						eFormSet.save()
+						redir = True
+				elif ('eForm' in request.POST):
+					eForm = etapeForm(request.POST)
+					if eForm.is_valid():
+						eForm.save()
+						redir = True
+				if redir:
 					return redirect('/convoyage/'+convoyage_id)
 			else:
-				caForm = convoyageAnimateurForm() 
+				caForm = convoyageAnimateurForm()
+				eFormSet = etapeFormSet(queryset=Etape.objects.filter(convoyage_id=convoyage.id).order_by('date_arrivee'))
+				eForm = etapeForm()
 		return render_to_response('convoyage.html',
-		{'convoyage': convoyage, 'lessaisons': lessaisons(), 'caForm':caForm},
+		{'convoyage': convoyage, 'lessaisons': lessaisons(), 'caForm':caForm, 'eFormSet':eFormSet, 'eForm':eForm},
 			context_instance=RequestContext(request)
 		)
 	else:
