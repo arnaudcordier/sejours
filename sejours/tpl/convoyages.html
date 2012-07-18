@@ -5,7 +5,7 @@
 {% block content %}
 <ul>
 	{% for convoyage in convoyage_list %}
-			<li><a href="/convoyage/{{ convoyage.id }}/">{{ convoyage }}</a></li>
+			<li><a href="{% url convoyage convoyage.id %}">{{ convoyage }}</a></li>
 	{% endfor %}
 </ul>
 {% endblock %}
