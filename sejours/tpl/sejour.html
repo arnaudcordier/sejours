@@ -41,7 +41,7 @@
 		{% if peut_creer_sa %}
 		<td>
 			{% if user.id != sa.animateur.personne.user.id %}
-				<form method='post' class='deleteSA' action="." >{% csrf_token %}
+				<form method='post' class='deleteSA' >{% csrf_token %}
 					<input type='hidden' name='sa_id' value='{{ sa.pk }}' />
 					<input type='submit' value='Effacer' class='btn btn-danger' />
 				</form>
@@ -85,7 +85,7 @@
 {% endif %}
 
 {% if sejourAnimateurForm %}
-	<form method='post' action="." >
+	<form method='post' >
 		{% csrf_token %}
 		<fieldset>
 			<input type="hidden" name="animateurId" value="{{ sejourAnimateurForm.animateur.id }}" />

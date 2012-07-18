@@ -110,7 +110,7 @@
 
 {% if caForm %}
 <h2>Ajouter un convoyeur</h2>
-<form method="post" class="form-horizontal" action="." >
+<form method="post" class="form-horizontal" >
 	{% csrf_token %}
 	<fieldset>
 		<input type="hidden" name="{{ caForm.convoyage.html_name }}" value="{{ convoyage.id }}" />

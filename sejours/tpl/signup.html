@@ -6,7 +6,7 @@
 {% block sidebar %}{% endblock %}
 
 {% block content %}
-<form method="post" action="." >
+<form method="post" >
 	{% csrf_token %}
 	<fieldset>
 		{{ form.as_p }}

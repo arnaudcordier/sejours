@@ -9,7 +9,7 @@
 <p>Problème avec le formulaire.</p>
 {% endif %}
 
-<form method="post" action="." >
+<form method="post" >
 {% csrf_token %}
 {{ form.as_p }}
 <p><input type="submit" value="Recevoir un lien pour changer mon mot de passe" /></p>
