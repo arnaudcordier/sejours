@@ -8,6 +8,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from userena import views as userena_views
 from django.http import HttpResponse
 from django.db.models import Q
+from time import gmtime, strftime
 
 import simplejson
 import logging
@@ -35,9 +36,13 @@ def mafiche(request):
 		context_instance=RequestContext(request)
 	)
 
-@permission_required('user.is_superuser')
+@login_required
 def animateur(request, animateur_id):
+	user = getCurrentUser(request)
 	animateur = get_object_or_404(Animateur, pk=animateur_id)
+	if (not peut_editer_animateur(animateur, user)):
+		logger.error("tentative de voir "+str(animateur.id)+" par "+user.email)
+		return redirect('/')
 	personne = Personne.objects.get(animateur__id=animateur_id)
 	if request.method == 'POST':
 		personneform = personneForm(request.POST, instance=personne)
@@ -235,6 +240,22 @@ def peut_voir_convoyage(convoyage, user):
 	if (len(ca)):
 		return True
 	logger.error(user.email + u' (n°' +str(user.id) + u') à tenté de voir le convoyage n°' + str(convoyage.id))
+	return False
+
+# Droit de modifier la fiche d'un animateur
+# Être directeur du séjour non fini de l'animateur
+def peut_editer_animateur(animateur, user):
+	if (user.is_superuser):
+		return True
+	anim_user = Animateur.objects.filter(personne__animateur__id=animateur.id)
+	if anim_user and anim_user[0].id == user.id:
+		return True
+	aujourdhui = strftime("%Y-%m-%d", gmtime())
+	sejours = Sejour.objects.filter(date_fin__gte = aujourdhui, animateurs__id=animateur.id)
+	if sejours:
+		for sejour in sejours:
+			if peut_creer_sejour_animateur(sejour, user):
+				return True
 	return False
 
 # renvoie l'utilisateur courant

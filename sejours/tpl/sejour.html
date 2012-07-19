@@ -28,7 +28,7 @@
 {% for sa in sejour.sejouranimateur_set.all %}
 	<tr>
 		<td>
-			{% if user.is_superuser %}
+			{% if peut_creer_sa %}
 				<a href='{% url animateur sa.animateur.id %}'>{{ sa.animateur }}</a>
 			{% else %}
 				{{ sa.animateur }}
