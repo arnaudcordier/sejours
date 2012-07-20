@@ -27,6 +27,7 @@ def mafiche(request):
 		if animateurform.is_valid() and personneform.is_valid():
 			personneform.save()
 			animateurform.save()
+			messages.success(request, u'Votre fiche a bien été mise à jour. Merci.')
 			return redirect('/mafiche')
 	else:
 		personneform = personneForm(instance=personne)
@@ -51,7 +52,7 @@ def animateur(request, animateur_id):
 		if animateurform.is_valid() and personneform.is_valid():
 			personneform.save()
 			animateurform.save()
-			messages.success(request, u'Votre fiche a été mise à jour. Merci.')
+			messages.success(request, u'La fiche a bien été mise à jour. Merci.')
 			return redirect('/animateur/'+animateur_id)
 	else:
 		personneform = personneForm(instance=personne)
@@ -87,17 +88,20 @@ def convoyage(request, convoyage_id):
 					caForm = convoyageAnimateurForm(request.POST)
 					if caForm.is_valid():
 						caForm.save()
+						messages.success(request, u'Animateur ajouté au convoyage.')
 						redir = True
 				elif ('eFormSet' in request.POST):
 					eFormSet = etapeFormSet(request.POST, queryset=Etape.objects.filter(convoyage_id=convoyage.id).order_by('date_arrivee'))
 					if eFormSet.is_valid():
 						eFormSet.save()
+						messages.success(request, u'Étapes mises à jour. Merci.')
 						redir = True
 				elif ('eForm' in request.POST):
 					eForm = etapeForm(request.POST)
 					if eForm.is_valid():
 						eForm.save()
 						redir = True
+						messages.success(request, u'Nouvelle étape créée.')
 				if redir:
 					return redirect('/convoyage/'+convoyage_id)
 			else:
@@ -142,6 +146,7 @@ def sejour(request, sejour_id):
 						return redirect('/sejour/' + sejour_id)
 					logger.error('efface sejouranimateur n°' + str(sa_id))
 					sa.delete()
+					messages.success(request, u'Animateur effacé de ce séjour.')
 					return redirect('/sejour/' + sejour_id)
 				# lier un animateur au séjour
 				elif ('sa_form' in request.POST and user.is_superuser):
@@ -151,12 +156,14 @@ def sejour(request, sejour_id):
 					form_sa = sejourAnimateurForm(animateur, sejour, request.POST)
 					if (form_sa.is_valid()):
 						form_sa.save(request)
+						messages.success(request, u'Animateur lié à ce séjour.')
 						return redirect('/sejour/' + sejour_id)
 				else:
 					# créer un animateur
 					form_create_animateur = createAnimateurForm(sejour_id, request.POST, sans_directeur=sans_directeur)
 					if (form_create_animateur.is_valid()):
 						user = form_create_animateur.save(request)
+						messages.success(request, u'Animateur créé, il va recevoir un email de notification.')
 						return redirect('/sejour/' + sejour_id)
 					elif (user.is_superuser):
 						email = request.POST['email']

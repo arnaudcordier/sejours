@@ -3,6 +3,9 @@
 {% block title %}Convoyage: {{ convoyage }}{% endblock %}
 
 {% block content %}
+
+{% include "messages.html" %}
+
 <h1>Convoyage {{ convoyage }}</h1>
 
 {% if convoyage.convoyageanimateur_set.all %}
