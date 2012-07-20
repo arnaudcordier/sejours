@@ -1,3 +1,4 @@
+{% include "messages.html" %}
 <form method="post" class="form-horizontal" >
 	{% csrf_token %}
 	{% if personneform.errors or animateurform.errors %}

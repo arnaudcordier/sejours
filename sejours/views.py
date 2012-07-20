@@ -9,6 +9,7 @@ from userena import views as userena_views
 from django.http import HttpResponse
 from django.db.models import Q
 from time import gmtime, strftime
+from django.contrib import messages
 
 import simplejson
 import logging
@@ -50,6 +51,7 @@ def animateur(request, animateur_id):
 		if animateurform.is_valid() and personneform.is_valid():
 			personneform.save()
 			animateurform.save()
+			messages.success(request, u'Votre fiche a été mise à jour. Merci.')
 			return redirect('/animateur/'+animateur_id)
 	else:
 		personneform = personneForm(instance=personne)
