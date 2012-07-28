@@ -1,9 +1,10 @@
 $(".rechercheAnimateur").autocomplete({
 	source: function( request, response ) {
 		$.ajax({
-			url: '/rechercheanimateur/'+request.term,
-			success: function( data ) {
-// 				console.log(data);
+			dataType: 'html',
+			url: '/rechercheanimateur/' + encodeURIComponent(request.term),
+			success: function(data, textStatus, jqXHR) {
+				data = jQuery.parseJSON(data);
 				response( $.map( data, function( item ) {
 					return {
 						label: item.prenom + " " + item.nom + " (" + item.email + ")",

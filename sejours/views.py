@@ -201,9 +201,8 @@ def rechercheanimateur(request, recherche):
 	if animateurs:
 		json = simplejson.dumps([({'id':animateur.id, 'nom':animateur.personne.nom, 'prenom':animateur.personne.prenom, 'email':animateur.personne.user.email}) for animateur in animateurs])
 	else:
-		json = simplejson.dumps({})
-		
-	return HttpResponse(json, 'content-Type: text/json; charset:UTF-8')
+		json = simplejson.dumps([])
+	return HttpResponse(json)
 
 @login_required
 def index(request):
