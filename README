@@ -1,0 +1,70 @@
+DESCRIPTION :
+
+«Séjours» a été créé pour faciliter l'administration des séjours pour les Éclaireuses et Éclaireurs De France.
+Mais il est possible qu'il soit utile à d'autres associations qui gèrent des séjours d'animation.
+
+«Séjours» a été créé par ArnAud Cordier et est soutenu par les associations «mutins» : http://www.mutins.net et «EEDF de Chalon sur Saône» : http://www.eedf-chalon.net/.
+
+------
+
+LICENCE :
+
+Ce logiciel est distribué selon les termes de la licence GPLv3. Voir le fichier COPYING.
+Copyright 2012 ArnAud Cordier ( eedf@arnaudcordier.org )
+
+------
+
+DÉPENDANCES :
+
+Séjours est un logiciel libre qui utilise le framework python «Django» : https://www.djangoproject.com/
+
+Il utilise les applications Django: «userena» : http://www.django-userena.org/, «guardian» : https://github.com/lukaszb/django-guardian/ et «easy-thumbnails» : https://github.com/SmileyChris/easy-thumbnails.
+
+Coté python il a besoin de simplejson, yaml, mysqldb et imaging.
+
+Coté javascript, HTML et CSS il utilise la bibliothèque javascript «jQuery» : http://jquery.com/ et le framework HTML «Bootstrap» : http://twitter.github.com/bootstrap/
+
+------
+
+INSTALLATION :
+
+Télécharger django 1.4 : 
+ wget https://www.djangoproject.com/download/1.4/tarball/ -O Django-1.4.tar.gz
+ tar xzvf Django-1.4.tar.gz
+ cd Django-1.4
+ python setup.py install
+
+Sur Debian, installer les dépendances python :
+ apt-get install python-yaml python-mysqldb python-simplejson python-imaging
+
+Cloner l'application :
+ git clone https://github.com/arnaudcordier/sejours.git
+
+Installer les applications tierces :
+ cd sejours
+ git clone https://github.com/bread-and-pepper/django-userena.github
+ ln -s django-userena/userena/
+
+ git clone https://github.com/lukaszb/django-guardian.github
+ ln -s django-guardian/guardian/
+
+ git clone https://github.com/SmileyChris/easy-thumbnails.github
+ ln -s easy-thumbnails/easy_thumbnails/
+
+Lancer l'application :
+ cd eedf
+ cp settings.dist settings.py
+ Éditer settings.py pour le faire correspondre à votre configuration
+ cd ..
+ ./manage.py syncdb
+ ./manage.py runserver
+
+Utiliser :
+ firefox http://localhost:8000/
+
+Il manque encore des fixtures pour pouvoir travailler avec des données de test.
+
+------
+
+REMERCIEMENTS :
+Merci à Malika Lachgar pour m'avoir embarqué dans ce truc sans fin, à Nahuel Angelinetti pour m'avoir embarqué dans Django et Bootstrap et aux permanents et animateurs d'EEDF Chalon sur Saône pour utiliser et tester ce logiciel.
