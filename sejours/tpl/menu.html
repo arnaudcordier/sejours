@@ -1,20 +1,35 @@
 	{% if not user.is_superuser %}
 		<li><a href="{% url mafiche %}">Ma fiche</a></li>
 	{% endif %}
+
 	{% for sa in user.personne.animateur.sejouranimateur_set.all %}
 		<li><a href="{% url sejour sa.sejour.id %}">Mon séjour</a></li>
 	{% endfor %}
+
 	{% for ca in user.personne.animateur.convoyageanimateur_set.all %}
 		<li><a href="{% url convoyage ca.convoyage.id %}">Mon convoyage</a></li>
 	{% endfor %}
-<!-- 	<li><a href="/{{ user.id }}/souhaits/">Mes choix</a></li> -->
+
 	{% for s in lessaisons %}
 		<li><a href="{% url saison s.id %}">{{ s }}</a></li>
 	{% endfor %}
+
 	{% if user.is_superuser %}
 		{% for s in lessaisons %}
 			<li><a href="{% url sejours s.id %}">sejours de {{ s }}</a></li>
 		{% endfor %}
 	{% endif %}
+
 	<li>{{ saison }}</li>
+
+	{% if user.is_superuser %}
+	<li>
+		<form class="form-inline" action="" style="margin:0;" id="voir_animateur_form">
+			<input class="rechercheAnimateur input-medium" type="text" name="recherche" value="" placeholder="Voir un animateur" accesskey="1" />
+			<input type="hidden" id="voir_animateur" value="" />
+			<input type="submit" value="voir" class="btn btn-info" />
+		</form>
+	</li>
+	{% endif %}
+
 	<li><a href="{% url userena_signout %}">déconnexion</a></li>

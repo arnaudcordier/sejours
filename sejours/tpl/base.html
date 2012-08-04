@@ -43,6 +43,11 @@
 	<script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
 	<script type="text/javascript">$.datepicker.setDefaults($.datepicker.regional["fr"]);</script>
 
+	{% if user.is_superuser %}
+	<script type="text/javascript" src="{% static "js/rechercheanimateur.js" %}"></script>
+	<script type="text/javascript" src="{% static "js/admin.js" %}"></script>
+	{% endif %}
+
 	{% block script %}{% endblock %}
 </body>
 </html>
