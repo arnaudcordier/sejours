@@ -9,6 +9,17 @@
 Veuillez remplir cette fiche d'information
 </p>
 
+<ul class="nav nav-list" style="float:right;">
+	<li class="nav-header">Séjours</li>
+	{% for sa in personne.animateur.sejouranimateur_set.all %}
+	<li><a href="{% url sejour sa.sejour.id %}">{{sa.sejour}}</a></li>
+	{% endfor %}
+	<li class="nav-header">Convoyages</li>
+	{% for ca in personne.animateur.convoyageanimateur_set.all %}
+	<li><a href="{% url convoyage ca.convoyage.id %}">{{ca.convoyage}}</a></li>
+	{% endfor %}
+</ul>
+
 {% include "animateur_form.html" %}
 
 {% endblock %}
