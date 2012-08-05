@@ -181,7 +181,7 @@
 	<thead><tr><th>Ville</th><th>Arrivée</th><th>Départ</th><th>Entrées</th><th>Sorties</th></tr></thead>
 	{% for form in eFormSet %}
 	<tr>
-		<td class='{% if form.ville.errors %} error{% endif %}'>
+		<td class='control-group{% if form.ville.errors %} error{% endif %}'>
 			{{ form.id }}
 			<input type="hidden" name="{{ form.convoyage.html_name}}" value="{{ form.convoyage.value }}" />
 			{{ form.ville }}
@@ -189,25 +189,25 @@
 				<span class="help-inline">{% for error in form.ville.errors %}{{ error }}{% endfor %}</span>
 			{% endif %}
 		</td>
-		<td class='{% if form.date_arrivee.errors %} error{% endif %}'>
-			{{ form.date_arrivee }}
+		<td class='control-group{% if form.date_arrivee.errors %} error{% endif %}'>
+			<input type='text' name='{{ form.date_arrivee.html_name }}' value='{% if form.date_arrivee.value %}{{ form.date_arrivee.value|date:"d/m/Y H:i" }}{% endif %}' id='id_{{ form.date_arrivee.html_name }}' class='datetime datedebut' readonly='readonly' style='cursor:inherit;'/>
 			{% if form.date_arrivee.errors %}
 				<span class="help-inline">{% for error in form.date_arrivee.errors %}{{ error }}{% endfor %}</span>
 			{% endif %}
 		</td>
-		<td class='{% if form.date_depart.errors %} error{% endif %}'>
-			{{ form.date_depart }}
+		<td class='control-group{% if form.date_depart.errors %} error{% endif %}'>
+			<input type='text' name='{{ form.date_depart.html_name }}' value='{% if form.date_depart.value %}{{ form.date_depart.value|date:"d/m/Y H:i" }}{% endif %}' id='id_{{ form.date_depart.html_name }}' class='datetime datefin' readonly='readonly' style='cursor:inherit;'/>
 			{% if form.date_depart.errors %}
 				<span class="help-inline">{% for error in form.date_depart.errors %}{{ error }}{% endfor %}</span>
 			{% endif %}
 		</td>
-		<td class='{% if form.entree.errors %} error{% endif %}'>
+		<td class='control-group{% if form.entree.errors %} error{% endif %}'>
 			{{ form.entree }}
 			{% if form.entree.errors %}
 				<span class="help-inline">{% for error in form.entree.errors %}{{ error }}{% endfor %}</span>
 			{% endif %}
 		</td>
-		<td class='{% if form.sortie.errors %} error{% endif %}'>
+		<td class='control-group{% if form.sortie.errors %} error{% endif %}'>
 			{{ form.sortie }}
 			{% if form.sortie.errors %}
 				<span class="help-inline">{% for error in form.sortie.errors %}{{ error }}{% endfor %}</span>
@@ -242,7 +242,7 @@
 		<div class='control-group{% if eForm.date_arrivee.errors %} error{% endif %}'>
 			<label class='control-label' for='id_{{ eForm.date_arrivee.html_name }}'>{{ eForm.date_arrivee.label }}:</label>
 			<div class='controls'>
-				{{ eForm.date_arrivee }}
+				<input type='text' name='{{ eForm.date_arrivee.html_name }}' value='{% if eForm.date_arrivee.value %}{{ eForm.date_arrivee.value|date:"d/m/Y H:i" }}{% endif %}' id='id_{{ eForm.date_arrivee.html_name }}' class='datetime datedebut' readonly='readonly' style='cursor:inherit;'/>
 				{% if eForm.date_arrivee.errors %}
 					<span class="help-inline">{% for error in eForm.date_arrivee.errors %}{{ error }}{% endfor %}</span>
 				{% endif %}
@@ -251,7 +251,7 @@
 		<div class='control-group{% if eForm.date_depart.errors %} error{% endif %}'>
 			<label class='control-label' for='id_{{ eForm.date_depart.html_name }}'>{{ eForm.date_depart.label }}:</label>
 			<div class='controls'>
-				{{ eForm.date_depart }}
+				<input type='text' name='{{ eForm.date_depart.html_name }}' value='{% if eForm.date_depart.value %}{{ eForm.date_depart.value|date:"d/m/Y H:i" }}{% endif %}' id='id_{{ eForm.date_depart.html_name }}' class='datetime datefin' readonly='readonly' style='cursor:inherit;'/>
 				{% if eForm.date_depart.errors %}
 					<span class="help-inline">{% for error in eForm.date_depart.errors %}{{ error }}{% endfor %}</span>
 				{% endif %}
@@ -282,4 +282,47 @@
 </form>
 {% endif %}
 
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+$(function(){
+	$('.datetime').datetimepicker({ changeYear: true, yearRange: "-1:+1", dateFormat: "dd/mm/yy", timeFormat: "hh:mm", stepMinute: 5 });
+	$('.datetime.datedebut').datetimepicker("option",{
+		onClose: function(dateText, inst) {
+			var id = this.id;
+			var finId = id.replace(/arrivee/,'depart');
+			var $fin = $('#'+finId);
+			var dateDebut = new Date(frenchDate2javascriptDate(dateText));
+			if ($fin.val() != '') {
+				var dateFin = new Date(frenchDate2javascriptDate($fin.val()));
+				if (dateDebut > dateFin)
+					$fin.val(dateText);
+			} else {
+				$fin.val(dateText);
+			}
+			$fin.datetimepicker('option', 'minDate', dateDebut);
+		}
+	});
+	$('.datetime.datefin').datetimepicker("option",{
+		onClose: function(dateText, inst) {
+			var id = this.id;
+			var debutId = id.replace(/depart/,'arrivee');
+			var $debut = $('#'+debutId);
+			var dateFin = new Date(frenchDate2javascriptDate(dateText));
+			if ($debut.val() != '') {
+				var dateDebut = new Date(frenchDate2javascriptDate($debut.val()));
+				if (dateDebut > dateFin)
+					$debut.val(dateText);
+			} else {
+				$debut.val(dateText);
+			}
+			$debut.datetimepicker('option', 'maxDate', dateFin);
+		}
+	});
+	function frenchDate2javascriptDate(date) {
+		return date.replace(/^(\d{2})\/(\d{2})\/(\d{4})(.*)$/,'$3/$2/$1$4');
+	}
+});
+</script>
 {% endblock %}

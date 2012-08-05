@@ -1,16 +1,7 @@
 DESCRIPTION :
 
-«Séjours» a été créé pour faciliter l'administration des séjours pour les Éclaireuses et Éclaireurs De France.
-Mais il est possible qu'il soit utile à d'autres associations qui gèrent des séjours d'animation.
-
-«Séjours» a été créé par ArnAud Cordier et est soutenu par les associations «mutins» : http://www.mutins.net et «EEDF de Chalon sur Saône» : http://www.eedf-chalon.net/.
-
-------
-
-LICENCE :
-
-Ce logiciel est distribué selon les termes de la licence GPLv3. Voir le fichier COPYING.
-Copyright 2012 ArnAud Cordier ( eedf@arnaudcordier.org )
+«Séjours» a été créé pour faciliter l'administration des séjours d'animation organisés pour les Éclaireuses et Éclaireurs De France.
+Mais il est possible qu'il soit utile à d'autres associations qui gèrent des séjours d'animation !
 
 ------
 
@@ -22,7 +13,16 @@ Il utilise les applications Django: «userena» : http://www.django-userena.org/
 
 Coté python il a besoin de simplejson, yaml, mysqldb et imaging.
 
-Coté javascript, HTML et CSS il utilise la bibliothèque javascript «jQuery» : http://jquery.com/ et le framework HTML «Bootstrap» : http://twitter.github.com/bootstrap/
+------
+
+INCLUSIONS :
+
+Javascript :
+  * la bibliothèque javascript «jQuery» : http://jquery.com/
+  * la bibliothèque/plugin javascript «jQuery UI» : http://jqueryui.com/
+  * le plugin jQuery «timepicker» : http://trentrichardson.com/examples/timepicker/
+HTML et CSS :
+  * le framework HTML «Bootstrap» : http://twitter.github.com/bootstrap/
 
 ------
 
@@ -67,4 +67,21 @@ Il manque encore des fixtures pour pouvoir travailler avec des données de test.
 ------
 
 REMERCIEMENTS :
-Merci à Malika Lachgar pour m'avoir embarqué dans ce truc sans fin, à Nahuel Angelinetti pour m'avoir embarqué dans Django et Bootstrap et aux permanents et animateurs d'EEDF Chalon sur Saône pour utiliser et tester ce logiciel.
+
+Merci à Malika Lachgar pour m'avoir embarqué dans ce truc sans fin, à Nahuel Angelinetti pour m'avoir embarqué dans Django et Bootstrap et aux permanents et animateurs d'EEDF Chalon-sur-Saône pour utiliser et tester ce logiciel.
+
+------
+
+PUBLICITÉ :
+
+«Séjours» a été créé par ArnAud Cordier.
+«Séjours» est soutenu par les associations :
+  * «mutins» : http://www.mutins.net/
+  * «EEDF de Chalon-sur-Saône» : http://www.eedf-chalon.net/
+
+------
+
+LICENCE :
+
+Ce logiciel est distribué selon les termes de la licence GPLv3. Voir le fichier COPYING.
+Copyright 2012 - ArnAud Cordier ( eedf @ arnaudcordier.org ).
