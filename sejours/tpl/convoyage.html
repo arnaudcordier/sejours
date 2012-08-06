@@ -3,6 +3,7 @@
 {% block title %}Convoyage: {{ convoyage }}{% endblock %}
 
 {% block content %}
+{% regroup convoyage.etape_set.all|dictsort:"date_depart" by date_depart as etapes %}
 
 {% include "messages.html" %}
 
@@ -77,9 +78,7 @@
 			<th>Total</th>
 		</tr>
 	</thead>
-	{% regroup convoyage.etape_set.all|dictsort:"date_depart" by date_depart as etapes %}
-	{% for es in etapes %}
-	{% for e in es.list %}
+	{% for es in etapes %}{% for e in es.list %}
 	<tr>
 		<td>{{ e.ville }}</td>
 		<td>{{ e.date_arrivee|date:"H:i" }}</td>
@@ -110,8 +109,7 @@
 		</tr>
 		{% endfor %}
 	{% endcomment %}
-	{% endfor %}
-	{% endfor %}
+	{% endfor %}{% endfor %}
 </table>
 
 {% if caForm %}
@@ -143,9 +141,9 @@
 			<label class='control-label' for='{{ caForm.entree.html_name }}'>{{ caForm.entree.label }}:</label>
 			<div class='controls'>
 				<select name="{{ caForm.entree.html_name }}" id="{{ caForm.entree.html_name }}">
-				{% for e in convoyage.etape_set.all %}
-					<option value="{{ e.id }}"{% if forloop.first %} selected="selected" {% endif %}>{{ e.ville }}</option>
-				{% endfor %}
+				{% for es in etapes %}{% for e in es.list %}
+					<option value="{{ e.id }}"{% if forloop.parentloop.first %} selected="selected" {% endif %}>{{ e.ville }}</option>
+				{% endfor %}{% endfor %}
 				</select>
 				{% if caForm.entree.errors %}
 					<span class="help-inline">{% for error in caForm.entree.errors %}{{ error }}{% endfor %}</span>
@@ -156,9 +154,9 @@
 			<label class='control-label' for='{{ caForm.sortie.html_name }}'>{{ caForm.sortie.label }}:</label>
 			<div class='controls'>
 				<select name="{{ caForm.sortie.html_name }}" id="{{ caForm.sortie.html_name }}">
-				{% for e in convoyage.etape_set.all %}
-					<option value="{{ e.id }}"{% if forloop.last %} selected="selected" {% endif %}>{{ e.ville }}</option>
-				{% endfor %}
+				{% for es in etapes %}{% for e in es.list %}
+					<option value="{{ e.id }}"{% if forloop.parentloop.last %} selected="selected" {% endif %}>{{ e.ville }}</option>
+				{% endfor %}{% endfor %}
 				</select>
 				{% if caForm.sortie.errors %}
 					<span class="help-inline">{% for error in caForm.sortie.errors %}{{ error }}{% endfor %}</span>
