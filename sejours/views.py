@@ -118,7 +118,7 @@ def convoyage(request, convoyage_id):
 @login_required
 def sejour(request, sejour_id):
 	sejour = get_object_or_404(Sejour, pk=sejour_id)
-	sejours = Sejour.objects.filter(saison__id=sejour.saison_id).order_by('nom')
+	sejours = Sejour.objects.filter(saison__id=sejour.saison_id).order_by('numero','nom')
 	user = getCurrentUser(request)
 	peut_creer_sa = False
 	form_sa = ''
@@ -188,7 +188,7 @@ def sejour(request, sejour_id):
 @permission_required('user.is_superuser')
 def sejours(request, saison_id):
 	saison = get_object_or_404(Saison, pk=saison_id)
-	sejours = Sejour.objects.filter(saison__id=saison_id).order_by('nom')
+	sejours = Sejour.objects.filter(saison__id=saison_id).order_by('numero','nom')
 	return render_to_response('sejours.html',
 		{'sejours':sejours, 'menu':menu(request)},
 		context_instance=RequestContext(request)
