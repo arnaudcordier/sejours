@@ -71,6 +71,11 @@ def animateur(request, animateur_id):
 @login_required
 def saison(request, saison_id):
 	saison = get_object_or_404(Saison, pk=saison_id)
+	user = getCurrentUser(request)
+	if (not peut_voir_saison(saison_id, user)):
+		logger.error(u"tentative de voir la saison "+unicode(saison)+" par "+user.email)
+		return redirect('/')
+
 	convoyages = Convoyage.objects.filter(saison_id = saison_id)
 	return render_to_response('saison.html',
 		{'lasaison': saison, 'convoyages': convoyages, 'menu':menu(request)},
@@ -267,6 +272,18 @@ def peut_editer_animateur(animateur, user):
 			if peut_creer_sejour_animateur(sejour, user):
 				return True
 	return False
+
+# Droit de voir une saison
+# Si celle-ci n'est pas encore terminé
+def peut_voir_saison(saison_id, user):
+	if (user.is_superuser):
+		return True
+	aujourdhui = strftime("%Y-%m-%d", gmtime())
+	nb_sejours = Sejour.objects.filter(date_fin__gte=aujourdhui, saison__id=saison_id).count()
+	if (nb_sejours > 0):
+		return True;
+	return False
+
 
 # renvoie l'utilisateur courant
 def getCurrentUser(request):
