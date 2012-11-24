@@ -117,6 +117,12 @@
 			</div>
 		</div>
 		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.bafaencours.html_name }}'>{{ animateurform.bafaencours.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.bafaencours.html_name }}' {% if animateurform.bafaencours.value %}checked='checked'{% endif %} id='{{ animateurform.bafaencours.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
 			<label class='control-label' for='{{ animateurform.afps.html_name }}'>{{ animateurform.afps.label }}:</label>
 			<div class='controls'>
 				<input type='checkbox' name='{{ animateurform.afps.html_name }}' {% if animateurform.afps.value %}checked='checked'{% endif %} id='{{ animateurform.afps.html_name }}' class='' />
@@ -138,6 +144,12 @@
 			<label class='control-label' for='{{ animateurform.bafd.html_name }}'>{{ animateurform.bafd.label }}:</label>
 			<div class='controls'>
 				<input type='checkbox' name='{{ animateurform.bafd.html_name }}' {% if animateurform.bafd.value %}checked='checked'{% endif %} id='{{ animateurform.bafd.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.bafdencours.html_name }}'>{{ animateurform.bafdencours.label }}:</label>
+			<div class='controls'>
+				<input type='checkbox' name='{{ animateurform.bafdencours.html_name }}' {% if animateurform.bafdencours.value %}checked='checked'{% endif %} id='{{ animateurform.bafdencours.html_name }}' class='' />
 			</div>
 		</div>
 		<div class='control-group'>
@@ -174,6 +186,12 @@
 			<label class='control-label' for='{{ animateurform.identite_num.html_name }}'>{{ animateurform.identite_num.label }}:</label>
 			<div class='controls'>
 				<input type='text' name='{{ animateurform.identite_num.html_name }}' value='{{ animateurform.identite_num.value }}' id='{{ animateurform.identite_num.html_name }}' class='' />
+			</div>
+		</div>
+		<div class='control-group'>
+			<label class='control-label' for='{{ animateurform.passeport_num.html_name }}'>{{ animateurform.passeport_num.label }}:</label>
+			<div class='controls'>
+				<input type='text' name='{{ animateurform.passeport_num.html_name }}' value='{{ animateurform.passeport_num.value }}' id='{{ animateurform.passeport_num.html_name }}' class='' />
 			</div>
 		</div>
 		<div class='control-group'>
