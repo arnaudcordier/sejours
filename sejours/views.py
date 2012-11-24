@@ -197,9 +197,9 @@ def sejours(request, saison_id):
 @permission_required('user.is_superuser')
 def rechercheanimateur(request, recherche):
 	#logger.error(recherche)
-	animateurs = Animateur.objects.select_related().filter(Q(personne__nom__icontains=recherche) | Q(personne__prenom__icontains=recherche) | Q(personne__user__email__icontains=recherche))
+	animateurs = Animateur.objects.select_related().filter(Q(personne__nom__icontains=recherche) | Q(personne__prenom__icontains=recherche) | Q(personne__user__email__icontains=recherche) | Q(personne__cp__startswith=recherche))
 	if animateurs:
-		json = simplejson.dumps([({'id':animateur.id, 'nom':animateur.personne.nom, 'prenom':animateur.personne.prenom, 'email':animateur.personne.user.email}) for animateur in animateurs])
+		json = simplejson.dumps([({'id':animateur.id, 'nom':animateur.personne.nom, 'prenom':animateur.personne.prenom, 'email':animateur.personne.user.email, 'cp':animateur.personne.cp}) for animateur in animateurs])
 	else:
 		json = simplejson.dumps([])
 	return HttpResponse(json)
