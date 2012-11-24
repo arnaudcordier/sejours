@@ -34,7 +34,7 @@ def mafiche(request):
 		animateurform = animateurForm(instance=animateur)
 
 	return render_to_response('mafiche.html',
-		{'u': u, 'lessaisons': lessaisons(), 'personneform':personneform, 'animateurform':animateurform },
+		{'u': u, 'menu':menu(request), 'personneform':personneform, 'animateurform':animateurform},
 		context_instance=RequestContext(request)
 	)
 
@@ -59,7 +59,7 @@ def animateur(request, animateur_id):
 		animateurform = animateurForm(instance=animateur)
 
 	return render_to_response('animateur.html',
-	{'personne': personne, 'lessaisons': lessaisons(), 'animateur':animateur, 'personneform':personneform, 'animateurform':animateurform },
+	{'personne':personne, 'menu':menu(request), 'animateur':animateur, 'personneform':personneform, 'animateurform':animateurform},
 	context_instance=RequestContext(request)
 	)
 
@@ -68,7 +68,7 @@ def saison(request, saison_id):
 	saison = get_object_or_404(Saison, pk=saison_id)
 	convoyages = Convoyage.objects.filter(saison_id = saison_id)
 	return render_to_response('saison.html',
-		{'lasaison': saison, 'convoyages': convoyages, 'lessaisons': lessaisons(), 'a': PasswordResetForm()},
+		{'lasaison': saison, 'convoyages': convoyages, 'menu':menu(request)},
 		context_instance=RequestContext(request),
 	)
 
@@ -109,7 +109,7 @@ def convoyage(request, convoyage_id):
 				eFormSet = etapeFormSet(queryset=Etape.objects.filter(convoyage_id=convoyage.id).order_by('date_arrivee'))
 				eForm = etapeForm()
 		return render_to_response('convoyage.html',
-		{'convoyage': convoyage, 'lessaisons': lessaisons(), 'caForm':caForm, 'eFormSet':eFormSet, 'eForm':eForm},
+		{'convoyage':convoyage, 'menu':menu(request), 'caForm':caForm, 'eFormSet':eFormSet, 'eForm':eForm},
 			context_instance=RequestContext(request)
 		)
 	else:
@@ -181,7 +181,7 @@ def sejour(request, sejour_id):
 		return redirect('/')
 
 	return render_to_response('sejour.html',
-		{'sejour': sejour, 'sejours': sejours, 'lessaisons': lessaisons(), 'form_create_animateur': form_create_animateur, 'peut_creer_sa': peut_creer_sa, 'sejourAnimateurForm':form_sa},
+		{'sejour':sejour, 'sejours':sejours, 'form_create_animateur':form_create_animateur, 'peut_creer_sa':peut_creer_sa, 'sejourAnimateurForm':form_sa, 'menu':menu(request)},
 		context_instance=RequestContext(request)
 	)
 
@@ -190,7 +190,7 @@ def sejours(request, saison_id):
 	saison = get_object_or_404(Saison, pk=saison_id)
 	sejours = Sejour.objects.filter(saison__id=saison_id).order_by('nom')
 	return render_to_response('sejours.html',
-		{'sejours': sejours, 'lessaisons': lessaisons()},
+		{'sejours':sejours, 'menu':menu(request)},
 		context_instance=RequestContext(request)
 	)
 
@@ -207,14 +207,11 @@ def rechercheanimateur(request, recherche):
 @login_required
 def index(request):
 	return render_to_response('index.html',
-		{'lessaisons': lessaisons()},
+		{'menu':menu(request)},
 		context_instance=RequestContext(request)
 	)
 
 # Fonctions utilitaires
-def lessaisons(): # TODO: devrait ne renvoyer que les saisons en cours
-	saison = Saison.objects.all()
-	return saison
 
 # Droit de lier un animateur à un séjour
 # Si l'utilisateur est directeur du séjour
@@ -270,3 +267,16 @@ def peut_editer_animateur(animateur, user):
 def getCurrentUser(request):
 	context=RequestContext(request)
 	return context.get('user')
+
+# Construction du menu selon l'utilisateur
+def menu(request):
+	user = getCurrentUser(request)
+	aujourdhui = strftime("%Y-%m-%d", gmtime())
+	saisons = Saison.objects.filter(sejour__date_fin__gte=aujourdhui).distinct()
+	saisonsids = [saison.id for saison in saisons]
+
+	sejours = Sejour.objects.filter(animateurs__personne__user__id=user.id, saison__id__in=saisonsids).order_by('date_debut')
+	convoyages = Convoyage.objects.filter(convoyageanimateur__animateur__personne__user__id=user.id, saison__id__in=saisonsids)
+
+	menu = {'saisons':saisons, 'sejours':sejours, 'convoyages':convoyages}
+	return menu

@@ -2,32 +2,32 @@
 		<li><a href="{% url mafiche %}">Ma fiche</a></li>
 	{% endif %}
 
-	{% for sa in user.personne.animateur.sejouranimateur_set.all %}
-		<li><a href="{% url sejour sa.sejour.id %}">Mon séjour</a></li>
+	{% for sejour in menu.sejours %}
+		<li><a href="{% url sejour sejour.id %}">Mon séjour</a></li>
 	{% endfor %}
 
-	{% for ca in user.personne.animateur.convoyageanimateur_set.all %}
-		<li><a href="{% url convoyage ca.convoyage.id %}">Mon convoyage</a></li>
+	{% for convoyage in menu.convoyages %}
+		<li><a href="{% url convoyage convoyage.id %}">Mon convoyage</a></li>
 	{% endfor %}
 
-	{% for s in lessaisons %}
-		<li><a href="{% url saison s.id %}">{{ s }}</a></li>
+	{% for saison in menu.saisons %}
+		<li><a href="{% url saison saison.id %}">{{ saison }}</a></li>
 	{% endfor %}
 
 	{% if user.is_superuser %}
-		{% for s in lessaisons %}
-			<li><a href="{% url sejours s.id %}">sejours de {{ s }}</a></li>
+		{# Liens vers la liste des séjours de la saison #}
+		{% for saison in menu.saisons %}
+			<li><a href="{% url sejours saison.id %}">séjours de {{ saison }}</a></li>
 		{% endfor %}
-	{% endif %}
 
-	{% if user.is_superuser %}
-	<li>
-		<form class="form-inline" action="" style="margin:0;" id="voir_animateur_form">
-			<input class="rechercheAnimateur input-medium" type="text" name="recherche" value="" placeholder="Voir un animateur" accesskey="1" />
-			<input type="hidden" id="voir_animateur" value="" />
-			<input type="submit" value="voir" class="btn btn-info" />
-		</form>
-	</li>
+		{# Formulaire de recherche d'un animateur #}
+		<li>
+			<form class="form-inline" action="" style="margin:0;" id="voir_animateur_form">
+				<input class="rechercheAnimateur input-medium" type="text" name="recherche" value="" placeholder="Voir un animateur" accesskey="1" />
+				<input type="hidden" id="voir_animateur" value="" />
+				<input type="submit" value="voir" class="btn btn-info" />
+			</form>
+		</li>
 	{% endif %}
 
 	<li><a href="{% url userena_signout %}">déconnexion</a></li>

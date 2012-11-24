@@ -1,8 +1,10 @@
 login required :
   https://docs.djangoproject.com/en/1.4/topics/auth/#the-login-required-decorator
 
-Pas d'oblication de prix pour un séjour.
 Trier les séjours par numéro de séjour.
 Ne pas autoriser la création d'un animateur sans nom ou prénom.
+Ne pas pouvoir voir les anciens séjours, saisons, convoyages.
 
-Montrer plusieurs séjours pour les anims
+DONE:
+	Pas d'obligation de prix pour un séjour.
+	Montrer plusieurs séjours pour les anims.
