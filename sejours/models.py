@@ -142,7 +142,7 @@ class Sejour(models.Model):
 	numero = models.CharField(verbose_name=u'Numéro', max_length=50)
 	date_debut = models.DateField(verbose_name=u'Date de début')
 	date_fin = models.DateField(verbose_name=u'Date de fin')
-	AUTONOMIE_CHOIX = ((u'B', u'Bonne'),(u'M', u'Moyenne'),(u'R', u'Réduite'))
+	AUTONOMIE_CHOIX = ((u'T', u'Très bonne'),(u'B', u'Bonne'),(u'M', u'Moyenne'),(u'R', u'Réduite'))
 	autonomie = models.CharField(verbose_name=u'Autonomie', max_length=1, choices=AUTONOMIE_CHOIX, blank=True)
 	texte = models.TextField(verbose_name=u'Présentation', blank=True)
 	info = models.TextField(verbose_name=u'Informations', blank=True)
