@@ -147,7 +147,7 @@ class Sejour(models.Model):
 	texte = models.TextField(verbose_name=u'Présentation', blank=True)
 	info = models.TextField(verbose_name=u'Informations', blank=True)
 	descriptif = models.TextField(verbose_name=u'Descriptif du catalogue', blank=True)
-	prix = models.SmallIntegerField(verbose_name=u'Prix', blank=True)
+	prix = models.SmallIntegerField(verbose_name=u'Prix', blank=True, null=True)
 	date_visite = models.DateField(verbose_name=u'Date de la visite', blank=True, null=True)
 	date_reunion = models.DateField(verbose_name=u'Date de la réunion', blank=True, null=True)
 	vacanciers = models.ManyToManyField(Vacancier, through='SejourVacancier', related_name='vacanciers')
