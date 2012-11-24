@@ -58,8 +58,13 @@ def animateur(request, animateur_id):
 		personneform = personneForm(instance=personne)
 		animateurform = animateurForm(instance=animateur)
 
+	aujourdhui = strftime("%Y-%m-%d", gmtime())
+
+	sejours = Sejour.objects.filter(animateurs__id=animateur.id, date_fin__gte=aujourdhui).order_by('date_debut')
+	convoyages = Convoyage.objects.filter(convoyageanimateur__animateur__id=animateur.id, etape__date_arrivee__gte=aujourdhui)
+
 	return render_to_response('animateur.html',
-	{'personne':personne, 'menu':menu(request), 'animateur':animateur, 'personneform':personneform, 'animateurform':animateurform},
+	{'personne':personne, 'menu':menu(request), 'animateur':animateur, 'personneform':personneform, 'animateurform':animateurform, 'sejours':sejours, 'convoyages':convoyages},
 	context_instance=RequestContext(request)
 	)
 
