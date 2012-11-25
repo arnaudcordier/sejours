@@ -248,11 +248,14 @@ def peut_voir_sejour(sejour, user):
 
 # Droit de voir un convoyage
 # Si l'utilisateur fait parti de ce séjour
+# Si le convoyage n'est pas encore passé
 def peut_voir_convoyage(convoyage, user):
 	if (user.is_superuser):
 		return True
-	ca = ConvoyageAnimateur.objects.filter(convoyage_id=convoyage.id, animateur__personne__user__id=user.id)
-	if (len(ca)):
+	aujourdhui = strftime("%Y-%m-%d", gmtime())
+	saisonsids = getCurrentSaisonsIds()
+	ca = ConvoyageAnimateur.objects.filter(convoyage_id=convoyage.id, animateur__personne__user__id=user.id, convoyage__saison__id__in=saisonsids).count()
+	if (ca > 0):
 		return True
 	logger.error(user.email + u' (n°' +str(user.id) + u') à tenté de voir le convoyage n°' + str(convoyage.id))
 	return False
@@ -284,7 +287,6 @@ def peut_voir_saison(saison_id, user):
 		return True;
 	return False
 
-
 # renvoie l'utilisateur courant
 def getCurrentUser(request):
 	context=RequestContext(request)
@@ -293,12 +295,17 @@ def getCurrentUser(request):
 # Construction du menu selon l'utilisateur
 def menu(request):
 	user = getCurrentUser(request)
-	aujourdhui = strftime("%Y-%m-%d", gmtime())
-	saisons = Saison.objects.filter(sejour__date_fin__gte=aujourdhui).distinct()
-	saisonsids = [saison.id for saison in saisons]
+	saisonsids = getCurrentSaisonsIds()
 
+	saisons = Saison.objects.filter(pk__in=saisonsids)
 	sejours = Sejour.objects.filter(animateurs__personne__user__id=user.id, saison__id__in=saisonsids).order_by('date_debut')
 	convoyages = Convoyage.objects.filter(convoyageanimateur__animateur__personne__user__id=user.id, saison__id__in=saisonsids)
 
 	menu = {'saisons':saisons, 'sejours':sejours, 'convoyages':convoyages}
 	return menu
+
+def getCurrentSaisonsIds():
+	aujourdhui = strftime("%Y-%m-%d", gmtime())
+	saisons = Saison.objects.filter(sejour__date_fin__gte=aujourdhui).distinct()
+	saisonsids = [saison.id for saison in saisons]
+	return saisonsids
