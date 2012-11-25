@@ -240,8 +240,9 @@ def peut_creer_sejour_animateur(sejour, user):
 def peut_voir_sejour(sejour, user):
 	if (user.is_superuser):
 		return True
-	sa = SejourAnimateur.objects.filter(sejour_id=sejour.id, animateur__personne__user__id=user.id)
-	if (len(sa)):
+	saisonsids = getCurrentSaisonsIds()
+	sa = SejourAnimateur.objects.filter(sejour_id=sejour.id, animateur__personne__user__id=user.id, sejour__saison__id__in=saisonsids).count()
+	if (sa > 0):
 		return True
 	logger.error(user.email + u' (n°' +str(user.id) + u') à tenté de voir le séjour n°' + str(sejour.id))
 	return False
@@ -304,6 +305,7 @@ def menu(request):
 	menu = {'saisons':saisons, 'sejours':sejours, 'convoyages':convoyages}
 	return menu
 
+# renvoie un tableau d'id des saisons non finies
 def getCurrentSaisonsIds():
 	aujourdhui = strftime("%Y-%m-%d", gmtime())
 	saisons = Saison.objects.filter(sejour__date_fin__gte=aujourdhui).distinct()

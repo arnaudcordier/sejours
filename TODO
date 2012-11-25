@@ -2,9 +2,9 @@ login required :
   https://docs.djangoproject.com/en/1.4/topics/auth/#the-login-required-decorator
 
 Ne pas autoriser la création d'un animateur sans nom ou prénom.
-Ne pas pouvoir voir les anciens saisons, séjours (2), convoyages (1), animateur.
 
 DONE:
 	Pas d'obligation de prix pour un séjour.
 	Montrer plusieurs séjours pour les anims.
 	Trier les séjours par numéro de séjour.
+	Ne pas pouvoir voir les anciens saisons, séjours (2), convoyages (1), animateur.
