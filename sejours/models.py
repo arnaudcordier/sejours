@@ -156,7 +156,7 @@ class Sejour(models.Model):
 	vacanciers = models.ManyToManyField(Vacancier, through='SejourVacancier', related_name='vacanciers')
 	animateurs = models.ManyToManyField(Animateur, through='SejourAnimateur', related_name='animateurs')
 	def __unicode__(self):
-		return self.nom
+		return self.nom + ' (' + self.numero + ')'
 
 class SejourVacancier(models.Model):
 	sejour = models.ForeignKey(Sejour, verbose_name=u'Séjour')
