@@ -3,6 +3,9 @@
 {% block title %}La saison {{ lasaison }}{% endblock %}
 
 {% block content %}
+
+{% include "messages.html" %}
+
 <h1>La saison : {{ lasaison }}</h1>
 
 Les convoyages de cette saison
@@ -29,5 +32,16 @@ Les convoyages de cette saison
 	{% endfor %}
 	</table>
 {% endfor %}
+
+{% if sejoursImport %}
+	<form method='post' enctype="multipart/form-data" >
+		{% csrf_token %}
+		<fieldset>
+			<legend>Importer les séjours de cette saison (tsv : id	lieu	nom	date_debut	date_fin (où date = YYYY-MM-JJ))</legend>
+			{{ sejoursImport.as_p }}
+			<p><input type='submit' value='Importer' name='siForm' /></p>
+		</fieldset>
+	</form>
+{% endif %}
 
 {% endblock %}

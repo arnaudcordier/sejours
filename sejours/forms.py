@@ -114,3 +114,22 @@ class createAnimateurForm(forms.Form):
 		send_mail(subject, email, settings.DEFAULT_FROM_EMAIL, [new_user.email])
 				
 		return new_user
+
+class csvSejoursImport(forms.Form):
+	fichier = forms.FileField()
+
+	# Import de séjour, tsv : id	lieu	nom	date_debut	date_fin (date = YYYY-MM-JJ)
+	def save(self, tsv, saison_id):
+		imported = 0;
+		total = 0;
+		for line in tsv['fichier']:
+			fields = line.strip().split("\t")
+			total += 1
+			if len(fields) == 5:
+				try:
+					sej = Sejour.objects.get(saison_id=saison_id, numero=fields[0])
+				except Sejour.DoesNotExist:
+					imported += 1
+					sej = Sejour.objects.create(saison_id=saison_id, numero=fields[0], nom=fields[2], date_debut=fields[3], date_fin=fields[4])
+		return str(imported) + u' séjours importés sur ' + str(total)
+

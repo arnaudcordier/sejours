@@ -77,8 +77,19 @@ def saison(request, saison_id):
 		return redirect('/')
 
 	convoyages = Convoyage.objects.filter(saison_id = saison_id)
+	sejoursImport = ''
+	if (user.is_superuser):
+		# Import de séjour, tsv : id	lieu	nom	date_debut	date_fin (date = YYYY-MM-JJ)
+		sejoursImport = csvSejoursImport()
+		if (request.method == 'POST' and 'siForm' in request.POST):
+			sejoursImport = csvSejoursImport(request.POST, request.FILES)
+			if sejoursImport.is_valid():
+				m = sejoursImport.save(request.FILES, saison_id)
+				messages.success(request, m)
+				return  redirect('/saison/'+saison_id)
+
 	return render_to_response('saison.html',
-		{'lasaison': saison, 'convoyages': convoyages, 'menu':menu(request)},
+		{'lasaison':saison, 'convoyages':convoyages, 'menu':menu(request), 'sejoursImport':sejoursImport},
 		context_instance=RequestContext(request),
 	)
 
