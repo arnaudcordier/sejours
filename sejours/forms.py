@@ -133,3 +133,25 @@ class csvSejoursImport(forms.Form):
 					sej = Sejour.objects.create(saison_id=saison_id, numero=fields[0], nom=fields[2], date_debut=fields[3], date_fin=fields[4])
 		return str(imported) + u' séjours importés sur ' + str(total)
 
+class csvConvoyagesImport(forms.Form):
+	fichier = forms.FileField()
+	
+	# Import de convoyage
+	# bus	ville étape	date arrivé	date départ	entrée	sortie
+	def save(self, tsv, saison_id):
+		imported = 0
+		total = 0
+		for line in tsv['fichier']:
+			fields = line.strip().split("\t")
+			total += 1
+			if len(fields) == 6:
+				# trouver le convoyage, sinon créer le bus et le convoyage
+				try:
+					conv = Convoyage.objects.get(saison_id=saison_id, bus__numero=fields[0])
+				except Convoyage.DoesNotExist:
+					bus = Bus.objects.create(numero=fields[0])
+					conv = Convoyage.objects.create(saison_id=saison_id, bus_id=bus.id)
+				# créer l'étape
+				etape = Etape.objects.create(convoyage_id=conv.id, ville=fields[1], date_arrivee=fields[2], date_depart=fields[3], entree=fields[4], sortie=fields[5])
+				imported += 1
+		return str(imported) + u' étapes importés sur ' + str(total)

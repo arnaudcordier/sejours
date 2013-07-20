@@ -44,4 +44,15 @@ Les convoyages de cette saison
 	</form>
 {% endif %}
 
+{% if convoyagesImport %}
+	<form method='post' enctype="multipart/form-data" >
+		{% csrf_token %}
+		<fieldset>
+			<legend>Importer les convoyages de cette saison (tsv : bus	étape	date_heure_debut	date_heure_fin	entrée	sortie (où date_heure = AAAA-MM-JJ HH:MM))</legend>
+			{{ convoyagesImport.as_p }}
+			<p><input type='submit' value='Importer' name='convForm' /></p>
+		</fieldset>
+	</form>
+{% endif %}
+
 {% endblock %}
