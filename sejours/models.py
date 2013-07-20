@@ -275,6 +275,7 @@ class ConvoyageAnimateur(models.Model):
 	animateur = models.ForeignKey(Animateur, verbose_name=u'Animateur')
 	hebergement = models.ForeignKey(Hebergement, verbose_name=u'Hébergement', blank=True, null=True)
 	info = models.TextField(verbose_name=u'Informations', blank=True)
+	info_train = models.TextField(verbose_name=u'Train', blank=True)
 	role = models.CharField(verbose_name=u'Rôle', max_length=1, choices=CONVOYEUR_ROLE)
 	def __unicode__(self):
 		return self.role
