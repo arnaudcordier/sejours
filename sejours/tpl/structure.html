@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Structure: {{ structure }}{% endblock %}
+
+{% block content %}
+
+<h1>Structure: {{ structure }}</h1>
+
+<form method='post' >
+	{% csrf_token %}
+	{{ form_structure.as_p }}
+	<p><input type='submit' value='Modifier' /></p>
+</form>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

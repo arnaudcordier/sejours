@@ -228,6 +228,23 @@ def sejours(request, saison_id):
 	)
 
 @permission_required('user.is_superuser')
+def structure(request, structure_id):
+	structure = get_object_or_404(Structure, pk=structure_id)
+	if request.method == 'POST':
+		form_structure = structureForm(request.POST, instance=structure)
+		if form_structure.is_valid():
+			form_structure.save()
+			messages.success(request, u'La fiche a bien été mise à jour. Merci.')
+			return redirect('/structure/'+structure_id)
+	else:
+		form_structure = structureForm(instance=structure)
+
+	return render_to_response('structure.html',
+		{'form_structure':form_structure, 'menu':menu(request)},
+		context_instance=RequestContext(request)
+	)
+
+@permission_required('user.is_superuser')
 def rechercheanimateur(request, recherche):
 	#logger.error(recherche)
 	animateurs = Animateur.objects.select_related().filter(Q(personne__nom__icontains=recherche) | Q(personne__prenom__icontains=recherche) | Q(personne__user__email__icontains=recherche) | Q(personne__cp__startswith=recherche))

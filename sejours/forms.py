@@ -35,6 +35,11 @@ class etapeForm(ModelForm):
 	class Meta:
 		model = Etape
 
+class structureForm(ModelForm):
+	class Meta:
+		model = Structure
+		exclude = ('proprietaire')
+
 etapeFormSet = modelformset_factory(Etape, extra=0)
 
 #Lier un animateur à un séjour
