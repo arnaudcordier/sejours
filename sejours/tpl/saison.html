@@ -20,7 +20,7 @@ Les convoyages de cette saison
 				{% if user.is_superuser %}</a>{% endif %}
 			</th>
 		</tr>
-		<tr><th>Ville</th><th>Départ</th><th>Arrivée</th></tr>
+		<tr><th>Ville</th><th>Arrivée</th><th>Départ</th></tr>
 	</thead>
 	{% regroup c.etape_set.all|dictsort:"date_depart" by date_depart as etapes %}
 	{% for es in etapes %}
