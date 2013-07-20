@@ -5,6 +5,7 @@ from userena.models import UserenaBaseProfile
 from django.dispatch import receiver
 from userena.signals import *
 from django.db.models import Count, Sum
+from django.utils.hashcompat import sha_constructor
 
 import logging
 logger = logging.getLogger('eedf')
@@ -22,6 +23,17 @@ def createAnimateur(nom, prenom, email, user_id):
 	animateur = Animateur(personne_id = personne.pk)
 	animateur.save()
 	return animateur.pk
+
+# création d'un animateur à partir de rien
+def createNewAnimateur(nom, prenom, email):
+	while True:
+		username = sha_constructor(str(random.random())).hexdigest()[:5]
+		try:
+			User.objects.get(username__iexact=username)
+		except User.DoesNotExist: break
+	password = sha_constructor(str(random.random())).hexdigest()[:6]
+	new_user = UserenaSignup.objects.create_user(username, email, password, True, False) # activé, pas de mail
+	return createAnimateur(nom, prenom, email, new_user.id)
 
 # Create your models here.
 class EedfProfile(UserenaBaseProfile):
