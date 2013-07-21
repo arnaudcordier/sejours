@@ -229,18 +229,27 @@ def sejours(request, saison_id):
 
 @permission_required('user.is_superuser')
 def structure(request, structure_id):
-	structure = get_object_or_404(Structure, pk=structure_id)
+	try:
+		structure = Structure.objects.get(pk=structure_id)
+	except Structure.DoesNotExist:
+		structure = False
 	if request.method == 'POST':
-		form_structure = structureForm(request.POST, instance=structure)
+		if structure:
+			form_structure = structureForm(request.POST, instance=structure)
+		else:
+			form_structure = structureForm(request.POST)
 		if form_structure.is_valid():
-			form_structure.save()
+			structure = form_structure.save()
 			messages.success(request, u'La fiche a bien été mise à jour. Merci.')
-			return redirect('/structure/'+structure_id)
+			return redirect('/structure/'+str(structure.id))
 	else:
-		form_structure = structureForm(instance=structure)
+		if structure:
+			form_structure = structureForm(instance=structure)
+		else:
+			form_structure = structureForm()
 
 	return render_to_response('structure.html',
-		{'form_structure':form_structure, 'menu':menu(request)},
+		{'form_structure':form_structure, 'menu':menu(request), 'structure':structure},
 		context_instance=RequestContext(request)
 	)
 
