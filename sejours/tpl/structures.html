@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Les structures{% endblock %}
+
+{% block content %}
+<h1>Structures</h1>
+
+<ul>
+{% for s in structures %}
+	<li>
+		<a href="{% url structure s.id %}">{{ s }}</a>
+	</li>
+{% endfor %}
+</ul>
+
+<p>
+	Créer une <a href="{% url structure 0 %}">nouvelle structure</a>
+</p>
+
+{% endblock %}

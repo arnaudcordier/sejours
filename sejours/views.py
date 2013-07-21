@@ -228,6 +228,14 @@ def sejours(request, saison_id):
 	)
 
 @permission_required('user.is_superuser')
+def structures(request):
+	structures = Structure.objects.all
+	return render_to_response('structures.html',
+		{'structures':structures, 'menu':menu(request)},
+		context_instance=RequestContext(request)
+	)
+
+@permission_required('user.is_superuser')
 def structure(request, structure_id):
 	try:
 		structure = Structure.objects.get(pk=structure_id)
